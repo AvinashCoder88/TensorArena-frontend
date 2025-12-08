@@ -76,6 +76,14 @@ export default function ArenaPage() {
                 setCode(unseenResult.question.solution_template);
                 setCurrentQuestionId(unseenResult.question.id);
 
+                // Debug logging
+                console.log("Question loaded:", {
+                    hasAnswer: !!unseenResult.question.answer,
+                    hasExplanation: !!unseenResult.question.explanation,
+                    answer: unseenResult.question.answer?.substring(0, 50),
+                    explanation: unseenResult.question.explanation?.substring(0, 50)
+                });
+
                 // Mark as seen immediately so it won't appear again
                 await markQuestionAsSeen(unseenResult.question.id);
             } else {
@@ -83,6 +91,14 @@ export default function ArenaPage() {
                 const newQuestion = await api.generateQuestion(topic, difficulty);
                 setQuestion(newQuestion);
                 setCode(newQuestion.solution_template);
+
+                // Debug logging
+                console.log("New question generated:", {
+                    hasAnswer: !!newQuestion.answer,
+                    hasExplanation: !!newQuestion.explanation,
+                    answer: newQuestion.answer?.substring(0, 50),
+                    explanation: newQuestion.explanation?.substring(0, 50)
+                });
 
                 // Save to database
                 const saveResult = await saveQuestion(newQuestion);
@@ -143,13 +159,23 @@ export default function ArenaPage() {
         setSubmitting(true);
         setSubmitMessage("");
         try {
-            const executionMessage = "Code execution is disabled in this build. Submission saved without running.";
+            // Execute the code first
+            const result = await api.executeCode(code);
 
+            let executionMessage = "";
+            if (result.error) {
+                executionMessage = `Execution Error:\n${result.error}`;
+                setOutput(executionMessage);
+            } else {
+                executionMessage = result.output;
+                setOutput(result.output);
+            }
+
+            // Then submit the solution
             const submitResult = await submitSolution(currentQuestionId, code, executionMessage);
 
             if (submitResult.success) {
                 setSubmitMessage("✅ " + (submitResult.message || "Solution submitted successfully!"));
-                setOutput(executionMessage);
             } else {
                 setSubmitMessage("❌ " + (submitResult.error || "Submission failed"));
             }
