@@ -5,6 +5,57 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 
+// Generate a unique subscription code in format XXXX-XXXX-XXXX
+function generateCodeString(): string {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Exclude similar looking characters
+    const segments = 3;
+    const segmentLength = 4;
+
+    const code = Array.from({ length: segments }, () =>
+        Array.from({ length: segmentLength }, () =>
+            chars.charAt(Math.floor(Math.random() * chars.length))
+        ).join("")
+    ).join("-");
+
+    return code;
+}
+
+export async function generateSubscriptionCode() {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user?.email) {
+        return { success: false, message: "Not authenticated" };
+    }
+
+    try {
+        let code: string;
+        let isUnique = false;
+
+        // Keep generating until we get a unique code
+        while (!isUnique) {
+            code = generateCodeString();
+            const existing = await prisma.subscriptionCode.findUnique({
+                where: { code }
+            });
+            if (!existing) {
+                isUnique = true;
+
+                // Create the code in database
+                await prisma.subscriptionCode.create({
+                    data: { code }
+                });
+
+                return { success: true, code };
+            }
+        }
+
+        return { success: false, message: "Failed to generate unique code" };
+    } catch (error) {
+        console.error("Code generation error:", error);
+        return { success: false, message: "Failed to generate code" };
+    }
+}
+
 export async function redeemSubscriptionCode(code: string) {
     const session = await getServerSession(authOptions);
 
@@ -13,24 +64,56 @@ export async function redeemSubscriptionCode(code: string) {
     }
 
     try {
-        // Validate code format (simple validation - you can make this more complex)
-        if (!code || code.length < 8) {
+        // Find the user
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email }
+        });
+
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+
+        // Validate code format
+        if (!code || !/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) {
             return { success: false, message: "Invalid code format" };
         }
 
-        // Calculate expiry date (1 month from now)
-        const expiryDate = new Date();
-        expiryDate.setMonth(expiryDate.getMonth() + 1);
-
-        // Update user subscription
-        await prisma.user.update({
-            where: { email: session.user.email },
-            data: {
-                isSubscribed: true,
-                subscriptionCode: code,
-                subscriptionExpiry: expiryDate,
-            },
+        // Find the subscription code
+        const subscriptionCode = await prisma.subscriptionCode.findUnique({
+            where: { code: code.toUpperCase() }
         });
+
+        if (!subscriptionCode) {
+            return { success: false, message: "Invalid code" };
+        }
+
+        if (subscriptionCode.isUsed) {
+            return { success: false, message: "Code has already been used" };
+        }
+
+        // Calculate expiry date (30 days from now)
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 30);
+
+        // Update user subscription and mark code as used
+        await prisma.$transaction([
+            prisma.user.update({
+                where: { id: user.id },
+                data: {
+                    isSubscribed: true,
+                    subscriptionCode: code,
+                    subscriptionExpiry: expiryDate,
+                },
+            }),
+            prisma.subscriptionCode.update({
+                where: { code: code.toUpperCase() },
+                data: {
+                    isUsed: true,
+                    usedBy: user.id,
+                    usedAt: new Date(),
+                },
+            }),
+        ]);
 
         revalidatePath("/payment");
         revalidatePath("/arena");
@@ -38,33 +121,5 @@ export async function redeemSubscriptionCode(code: string) {
     } catch (error) {
         console.error("Code redemption error:", error);
         return { success: false, message: "Failed to redeem code" };
-    }
-}
-
-export async function simulatePaymentSuccess() {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user?.email) {
-        return { success: false, message: "Not authenticated" };
-    }
-
-    try {
-        const expiryDate = new Date();
-        expiryDate.setMonth(expiryDate.getMonth() + 1);
-
-        await prisma.user.update({
-            where: { email: session.user.email },
-            data: {
-                isSubscribed: true,
-                subscriptionExpiry: expiryDate,
-            },
-        });
-
-        revalidatePath("/payment");
-        revalidatePath("/arena");
-        return { success: true };
-    } catch (error) {
-        console.error("Payment simulation error:", error);
-        return { success: false, message: "Failed to update subscription" };
     }
 }

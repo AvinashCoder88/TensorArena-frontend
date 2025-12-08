@@ -56,6 +56,7 @@ model User {
   sessions      Session[]
   progress      Progress[]
   questionAttempts UserQuestionAttempt[]
+  subscriptionCodes SubscriptionCode[]
 }
 
 model VerificationToken {
@@ -106,4 +107,18 @@ model UserQuestionAttempt {
   
   @@unique([userId, questionId])
   @@index([userId])
+}
+
+model SubscriptionCode {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  isUsed    Boolean  @default(false)
+  usedBy    String?
+  createdAt DateTime @default(now())
+  usedAt    DateTime?
+  
+  user User? @relation(fields: [usedBy], references: [id], onDelete: SetNull)
+  
+  @@index([code])
+  @@index([isUsed])
 }
