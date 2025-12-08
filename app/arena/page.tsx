@@ -247,6 +247,8 @@ export default function ArenaPage() {
                             description={question.description}
                             difficulty={question.difficulty}
                             topic={question.topic}
+                            answer={question.answer}
+                            explanation={question.explanation}
                         />
                     ) : (
                         <div className="h-full flex items-center justify-center">

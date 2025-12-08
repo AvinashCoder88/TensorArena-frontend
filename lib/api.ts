@@ -7,6 +7,8 @@ export interface Question {
     topic: string;
     test_cases: string[];
     solution_template: string;
+    answer?: string;
+    explanation?: string;
 }
 
 export const api = {

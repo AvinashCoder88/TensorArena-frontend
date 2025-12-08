@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
-import { Info, CheckCircle2, Code } from "lucide-react";
+import { Info, CheckCircle2, Code, Lightbulb, Unlock, ChevronDown, ChevronUp } from "lucide-react";
 
 interface QuestionDisplayProps {
     title: string;
     description: string;
     difficulty: "Basic" | "Intermediate" | "Advanced";
     topic: string;
+    answer?: string;
+    explanation?: string;
 }
 
 export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
@@ -15,7 +17,11 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
     description,
     difficulty,
     topic,
+    answer,
+    explanation,
 }) => {
+    const [showSolution, setShowSolution] = useState(false);
+
     const difficultyColor = {
         Basic: "text-green-400 border-green-400/30 bg-green-400/10",
         Intermediate: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
@@ -63,18 +69,52 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
                         <p><strong>3. Submit</strong> when ready - your solution will be evaluated against test cases</p>
                     </div>
                 </div>
-                <div className="pt-2 border-t border-blue-500/20">
-                    <p className="text-xs text-gray-400">
-                        💡 <strong>Tip:</strong> The code template includes all necessary imports.
-                        You can run the code directly in your Python CLI or use the &quot;Run Code&quot; button.
-                    </p>
-                </div>
             </div>
 
             {/* Problem Description */}
             <div className="prose prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-code:text-blue-300 prose-pre:bg-gray-950 prose-pre:border prose-pre:border-gray-800">
                 <ReactMarkdown>{description}</ReactMarkdown>
             </div>
+
+            {/* Solution & Explanation Section */}
+            {(answer || explanation) && (
+                <div className="border border-gray-800 rounded-xl overflow-hidden bg-black/20">
+                    <button
+                        onClick={() => setShowSolution(!showSolution)}
+                        className="w-full flex items-center justify-between p-4 bg-gray-900/50 hover:bg-gray-800/50 transition-colors"
+                    >
+                        <div className="flex items-center space-x-2 text-yellow-400">
+                            {showSolution ? <Unlock className="w-5 h-5" /> : <Lightbulb className="w-5 h-5" />}
+                            <span className="font-semibold">Solution & Explanation</span>
+                        </div>
+                        {showSolution ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                    </button>
+
+                    {showSolution && (
+                        <div className="p-4 space-y-6 animate-in slide-in-from-top-2 duration-200">
+                            {explanation && (
+                                <div className="space-y-2">
+                                    <h4 className="text-sm font-medium text-gray-300 uppercase tracking-wider">Concept Explanation</h4>
+                                    <div className="prose prose-invert prose-sm text-gray-400 bg-gray-900/30 p-4 rounded-lg border border-gray-800/50">
+                                        <ReactMarkdown>{explanation}</ReactMarkdown>
+                                    </div>
+                                </div>
+                            )}
+
+                            {answer && (
+                                <div className="space-y-2">
+                                    <h4 className="text-sm font-medium text-gray-300 uppercase tracking-wider">Reference Solution</h4>
+                                    <div className="rounded-lg overflow-hidden border border-gray-800">
+                                        <pre className="p-4 bg-gray-950 text-xs overflow-x-auto text-green-300 font-mono">
+                                            {answer}
+                                        </pre>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Expected Output Info */}
             <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">

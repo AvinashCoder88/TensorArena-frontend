@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 
+
 interface QuestionData {
     title: string;
     description: string;
@@ -12,6 +13,8 @@ interface QuestionData {
     topic: string;
     test_cases: string[];
     solution_template: string;
+    answer?: string;
+    explanation?: string;
 }
 
 export async function saveQuestion(questionData: QuestionData) {
@@ -37,6 +40,8 @@ export async function saveQuestion(questionData: QuestionData) {
                 topic: questionData.topic,
                 testCases: questionData.test_cases,
                 solutionTemplate: questionData.solution_template,
+                answer: questionData.answer,
+                explanation: questionData.explanation,
             },
         });
 
@@ -90,6 +95,8 @@ export async function getUnseenQuestion(topic: string, difficulty: string) {
                     topic: unseenQuestion.topic,
                     test_cases: unseenQuestion.testCases,
                     solution_template: unseenQuestion.solutionTemplate,
+                    answer: unseenQuestion.answer,
+                    explanation: unseenQuestion.explanation,
                 },
             };
         }

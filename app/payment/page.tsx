@@ -85,8 +85,13 @@ export default function PaymentPage() {
                         <DollarSign className="w-8 h-8" />
                     </div>
                     <h2 className="text-3xl font-bold">Unlock Premium</h2>
-                    <p className="mt-2 text-gray-400">Get unlimited access to AI challenges and code execution.</p>
-                    <div className="mt-4 text-2xl font-bold text-blue-500">$9.99/month</div>
+                    <div className="mt-4 flex flex-col items-center justify-center space-y-1">
+                        <div className="flex items-center space-x-2 text-lg">
+                            <span className="text-gray-400">Get unlimited access to AI challenges</span>
+                            <span className="text-blue-500 font-bold">$19.99/month</span>
+                        </div>
+                        <p className="text-xs text-red-400 font-medium">Payments are non-refundable</p>
+                    </div>
                 </div>
 
                 <div className="space-y-6 pt-4">
