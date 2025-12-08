@@ -100,7 +100,7 @@ export default function PaymentPage() {
                         <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Payment Options</h3>
 
                         {/* PayPal Button Container */}
-                        <div id="paypal-container-26M8LP77GNW7U" className="w-full flex justify-center z-0"></div>
+                        <div id="paypal-container-26M8LP77GNW7U" className="w-full min-h-[45px]" style={{ display: 'block' }}></div>
 
                         <div className="relative flex py-2 items-center">
                             <div className="flex-grow border-t border-gray-800"></div>

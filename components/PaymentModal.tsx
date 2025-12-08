@@ -51,7 +51,7 @@ export function PaymentModal({ isOpen, onClose, questionsUsed }: PaymentModalPro
                         </div>
                     </div>
 
-                    <div className="text-3xl font-bold text-blue-500">$9.99/month</div>
+                    <div className="text-3xl font-bold text-blue-500">$19.99/month</div>
 
                     <button
                         onClick={() => router.push("/payment")}
