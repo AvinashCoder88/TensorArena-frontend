@@ -134,7 +134,8 @@ export default function ArenaPage() {
         }
 
         // Check if user has written any code
-        if (!code || code.trim() === "" || code.includes("# TODO: Write your solution here")) {
+        const trimmedCode = code.trim();
+        if (!trimmedCode || trimmedCode.length < 10) {
             setSubmitMessage("⚠️ Please write your solution before submitting");
             return;
         }
