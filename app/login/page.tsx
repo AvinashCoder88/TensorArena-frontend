@@ -25,6 +25,7 @@ export default function LoginPage() {
             if (result?.error) {
                 setError("Invalid credentials");
             } else {
+                router.refresh(); // Update client-side session state
                 router.push("/arena");
             }
         } catch {
