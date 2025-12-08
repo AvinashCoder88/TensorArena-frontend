@@ -109,9 +109,19 @@ export default function ArenaPage() {
         setOutput("");
         setSubmitMessage("");
         try {
-            const message = "Code execution is disabled in this build.";
-            setOutput(message);
-            setSubmitMessage(message);
+            const result = await api.executeCode(code);
+
+            if (result.error) {
+                setOutput(`Error:\n${result.error}`);
+                setSubmitMessage("❌ Execution failed");
+            } else {
+                setOutput(result.output);
+                setSubmitMessage("✅ Code executed successfully");
+            }
+        } catch (error) {
+            console.error("Execution error:", error);
+            setOutput("Failed to execute code. Please check your backend connection.");
+            setSubmitMessage("❌ Execution failed");
         } finally {
             setExecuting(false);
         }
@@ -120,6 +130,12 @@ export default function ArenaPage() {
     const handleSubmit = async () => {
         if (!currentQuestionId) {
             setSubmitMessage("No question loaded");
+            return;
+        }
+
+        // Check if user has written any code
+        if (!code || code.trim() === "" || code.includes("# TODO: Write your solution here")) {
+            setSubmitMessage("⚠️ Please write your solution before submitting");
             return;
         }
 

@@ -31,4 +31,20 @@ export const api = {
 
         return response.json();
     },
+
+    executeCode: async (code: string): Promise<{ output: string; error: string | null }> => {
+        const response = await fetch(`${API_BASE_URL}/execute_code`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ code }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to execute code");
+        }
+
+        return response.json();
+    },
 };
