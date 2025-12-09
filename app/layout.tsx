@@ -1,13 +1,26 @@
 import type { Metadata } from "next";
 import { ReactNode } from "react";
-import Link from "next/link";
+import { GlobalHeader } from "@/components/GlobalHeader";
 import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "TensorArena - Master AI Engineering",
   description: "Level up your AI engineering skills with adaptive coding challenges. Practice TensorFlow, PyTorch, and machine learning concepts in a real-world environment.",
-  keywords: ["AI Engineering", "Machine Learning", "TensorFlow", "PyTorch", "Coding Challenges", "LeetCode for AI", "Data Science"],
+  keywords: [
+    "AI Engineering",
+    "Machine Learning",
+    "TensorFlow",
+    "PyTorch",
+    "Coding Challenges",
+    "LeetCode for AI",
+    "Data Science",
+    "AI Interview Prep",
+    "LLM Engineering",
+    "System Design for AI",
+    "Machine Learning Interview",
+    "Prompt Engineering"
+  ],
   authors: [{ name: "TensorArena Team" }],
   robots: {
     index: true,
@@ -55,17 +68,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans min-h-screen flex flex-col">
         <Providers>
-          <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-              <Link href="/" className="flex items-center space-x-2 transition-opacity hover:opacity-80">
-                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-                  TensorArena
-                </span>
-              </Link>
-              {/* Add more nav items here if needed later */}
-            </div>
-          </header>
-          <main className="flex-grow pt-16">
+          <GlobalHeader />
+          <main className="flex-grow">
             {children}
           </main>
           <footer className="bg-black border-t border-gray-800 py-8 mt-auto">

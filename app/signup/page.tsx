@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -32,18 +31,8 @@ export default function SignupPage() {
                 throw new Error(data.message || "Signup failed");
             }
 
-            // Auto-login after signup
-            const result = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
-            });
-
-            if (result?.error) {
-                setError("Signup successful but login failed. Please login manually.");
-            } else {
-                router.push("/arena");
-            }
+            // Redirect to login page
+            router.push("/login?callbackUrl=/arena");
         } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
             setError(err.message || "An error occurred");
         } finally {

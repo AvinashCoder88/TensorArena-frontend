@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Brain, Code2, Sparkles } from "lucide-react";
+import { ArrowRight, Brain, Code2, Sparkles, Building2, GraduationCap, Network } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -79,6 +79,21 @@ export default function Home() {
                             icon: Sparkles,
                             title: "Instant Feedback",
                             desc: "Get immediate, detailed feedback on your code logic, efficiency, and style from our AI tutor."
+                        },
+                        {
+                            icon: Building2, // Need to import
+                            title: "Company-Specific Prep",
+                            desc: "Targeted practice for top tech companies (FAANG/MAANG) with curated question sets."
+                        },
+                        {
+                            icon: GraduationCap, // Need to import
+                            title: "Role-Based Tracks",
+                            desc: "Specialized paths for ML Engineers, Data Scientists, and Research Scientists."
+                        },
+                        {
+                            icon: Network, // Need to import
+                            title: "System Design",
+                            desc: "Master ML System Design interviews with comprehensive architectural challenges."
                         }
                     ].map((feature, i) => (
                         <div key={i} className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-gray-700 transition-colors">
