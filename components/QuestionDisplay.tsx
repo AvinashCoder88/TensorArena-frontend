@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
-import { Info, CheckCircle2, Code, Lightbulb, Unlock, ChevronDown, ChevronUp } from "lucide-react";
+import { Info, CheckCircle2, Code, Lightbulb, Unlock, ChevronUp } from "lucide-react";
 
 interface QuestionDisplayProps {
     title: string;
@@ -78,39 +78,57 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
 
             {/* Solution & Explanation Section */}
             {(answer || explanation) && (
-                <div className="border border-gray-800 rounded-xl overflow-hidden bg-black/20">
-                    <button
-                        onClick={() => setShowSolution(!showSolution)}
-                        className="w-full flex items-center justify-between p-4 bg-gray-900/50 hover:bg-gray-800/50 transition-colors"
-                    >
-                        <div className="flex items-center space-x-2 text-yellow-400">
-                            {showSolution ? <Unlock className="w-5 h-5" /> : <Lightbulb className="w-5 h-5" />}
-                            <span className="font-semibold">Solution & Explanation</span>
-                        </div>
-                        {showSolution ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                    </button>
-
-                    {showSolution && (
-                        <div className="p-4 space-y-6 animate-in slide-in-from-top-2 duration-200">
-                            {explanation && (
-                                <div className="space-y-2">
-                                    <h4 className="text-sm font-medium text-gray-300 uppercase tracking-wider">Concept Explanation</h4>
-                                    <div className="prose prose-invert prose-sm text-gray-400 bg-gray-900/30 p-4 rounded-lg border border-gray-800/50">
-                                        <ReactMarkdown>{explanation}</ReactMarkdown>
-                                    </div>
+                <div className="space-y-4">
+                    {!showSolution ? (
+                        <button
+                            onClick={() => setShowSolution(true)}
+                            className="w-full flex items-center justify-center space-x-3 p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 border-2 border-yellow-500/50 hover:border-yellow-400 rounded-xl transition-all duration-200 group"
+                        >
+                            <Lightbulb className="w-6 h-6 text-yellow-400 group-hover:text-yellow-300" />
+                            <span className="text-lg font-bold text-yellow-400 group-hover:text-yellow-300">
+                                View Solution
+                            </span>
+                        </button>
+                    ) : (
+                        <div className="border-2 border-yellow-500/50 rounded-xl overflow-hidden bg-black/30">
+                            <button
+                                onClick={() => setShowSolution(false)}
+                                className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 transition-colors"
+                            >
+                                <div className="flex items-center space-x-2 text-yellow-400">
+                                    <Unlock className="w-5 h-5" />
+                                    <span className="font-semibold text-lg">Solution & Explanation</span>
                                 </div>
-                            )}
+                                <ChevronUp className="w-5 h-5 text-yellow-400" />
+                            </button>
 
-                            {answer && (
-                                <div className="space-y-2">
-                                    <h4 className="text-sm font-medium text-gray-300 uppercase tracking-wider">Reference Solution</h4>
-                                    <div className="rounded-lg overflow-hidden border border-gray-800">
-                                        <pre className="p-4 bg-gray-950 text-xs overflow-x-auto text-green-300 font-mono">
-                                            {answer}
-                                        </pre>
+                            <div className="p-6 space-y-6 bg-gray-900/50">
+                                {explanation && (
+                                    <div className="space-y-3">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="h-1 w-1 rounded-full bg-blue-400"></div>
+                                            <h4 className="text-base font-semibold text-blue-400">How It Works</h4>
+                                        </div>
+                                        <div className="prose prose-invert prose-sm max-w-none text-gray-300 bg-gray-900/50 p-5 rounded-lg border border-gray-700 leading-relaxed">
+                                            <ReactMarkdown>{explanation}</ReactMarkdown>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+
+                                {answer && (
+                                    <div className="space-y-3">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="h-1 w-1 rounded-full bg-green-400"></div>
+                                            <h4 className="text-base font-semibold text-green-400">Solution Code</h4>
+                                        </div>
+                                        <div className="rounded-lg overflow-hidden border-2 border-green-500/30">
+                                            <pre className="p-5 bg-gray-950 text-sm overflow-x-auto text-green-300 font-mono leading-relaxed">
+{answer}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
