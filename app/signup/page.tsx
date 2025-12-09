@@ -9,6 +9,7 @@ export default function SignupPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -113,10 +114,36 @@ export default function SignupPage() {
                         <div className="text-red-500 text-sm text-center">{error}</div>
                     )}
 
+                    <div className="flex items-start">
+                        <div className="flex h-5 items-center">
+                            <input
+                                id="terms"
+                                name="terms"
+                                type="checkbox"
+                                required
+                                className="h-4 w-4 rounded border-gray-800 bg-gray-950 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-900"
+                                checked={agreedToTerms}
+                                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                            />
+                        </div>
+                        <div className="ml-3 text-sm">
+                            <label htmlFor="terms" className="text-gray-400">
+                                I agree to the{" "}
+                                <Link href="/terms" className="font-medium text-blue-500 hover:text-blue-400">
+                                    Terms of Service
+                                </Link>{" "}
+                                and{" "}
+                                <Link href="/privacy" className="font-medium text-blue-500 hover:text-blue-400">
+                                    Privacy Policy
+                                </Link>
+                            </label>
+                        </div>
+                    </div>
+
                     <button
                         type="submit"
-                        disabled={loading}
-                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+                        disabled={loading || !agreedToTerms}
+                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? "Creating account..." : "Sign up"}
                     </button>
