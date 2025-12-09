@@ -78,13 +78,15 @@ export default function PaymentPage() {
                                     layout: 'horizontal',
                                     label: 'subscribe'
                                 },
-                                createSubscription: (data: any, actions: any) => {
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                createSubscription: (data: Record<string, unknown>, actions: any) => {
                                     return actions.subscription.create({
                                         /* Creates the subscription */
                                         plan_id: 'P-36J38125SY7265158NE3YEXA'
                                     });
                                 },
-                                onApprove: async (data: any, actions: any) => {
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                onApprove: async (data: any) => {
                                     try {
                                         console.log("Subscription successful, ID:", data.subscriptionID);
 
@@ -104,6 +106,7 @@ export default function PaymentPage() {
                                         setLoading(false);
                                     }
                                 },
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 onError: (err: any) => {
                                     console.error("PayPal error:", err);
                                     alert("There was an error with PayPal.");

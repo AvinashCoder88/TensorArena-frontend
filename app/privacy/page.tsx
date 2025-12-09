@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
 
                 <h2 className="text-2xl font-semibold text-white mt-8">1. Introduction</h2>
                 <p>
-                    Welcome to TensorArena ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.
+                    Welcome to TensorArena (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your personal information and your right to privacy.
                     If you have any questions or concerns about this privacy notice or our practices with regard to your personal information,
                     please contact us.
                 </p>
