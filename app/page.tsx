@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Brain, Code2, Sparkles, Building2, GraduationCap, Network } from "lucide-react";
+import { ArrowRight, Brain, Code2, Sparkles, Building2, GraduationCap, Network, ArrowDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -50,62 +50,105 @@ export default function Home() {
                                 <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 <div className="absolute inset-0 rounded-full bg-white/20 blur-xl group-hover:blur-2xl transition-all opacity-0 group-hover:opacity-100" />
                             </button>
-                            <Link
-                                href="/curriculum"
-                                className="px-8 py-4 rounded-full font-bold text-lg border border-gray-800 hover:bg-gray-900 transition-colors"
+                            <button
+                                onClick={() => {
+                                    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                                className="px-8 py-4 rounded-full font-bold text-lg border border-gray-800 hover:bg-gray-900 transition-colors flex items-center gap-2"
                             >
-                                View Curriculum
-                            </Link>
+                                Explore Features
+                                <ArrowDown className="w-5 h-5" />
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Features Grid */}
-            <div className="container mx-auto px-6 py-24 border-t border-gray-900">
+            <div id="features" className="container mx-auto px-6 py-24 border-t border-gray-900">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Choose Your Learning Path</h2>
+                    <p className="text-gray-400 text-lg">Select a feature below to start your AI engineering journey</p>
+                </div>
+
                 <div className="grid md:grid-cols-3 gap-8">
                     {[
                         {
-                            icon: Brain,
-                            title: "Adaptive AI",
-                            desc: "Our backend model analyzes your solutions and generates questions that perfectly match your current skill level."
+                            icon: Network, // System Design needs a network-like icon
+                            title: "System Design for AI",
+                            desc: "Architect scalable LLM systems, RAG pipelines, and inference clusters. Learn the infrastructure behind the models.",
+                            link: "/system-design", // Updated link
+                            delay: "0ms"
                         },
                         {
                             icon: Code2,
-                            title: "Real-world Scenarios",
-                            desc: "Practice with problems derived from actual AI/ML engineering challenges, not just abstract algorithms."
+                            title: "Real-World Production",
+                            desc: "Beyond algorithms: Debug production outages, optimize inference latency, and bad deployments in a simulated environment.",
+                            link: "/production", // Updated link
+                            delay: "100ms"
                         },
                         {
-                            icon: Sparkles,
-                            title: "Instant Feedback",
-                            desc: "Get immediate, detailed feedback on your code logic, efficiency, and style from our AI tutor."
+                            icon: Brain,
+                            title: "Adaptive AI Mentor",
+                            desc: "Your personal AI tutor that analyzes your code in real-time, pointing out logic gaps and suggesting optimizations.",
+                            link: "/arena",
+                            delay: "200ms"
                         },
                         {
-                            icon: Building2, // Need to import
-                            title: "Company-Specific Prep",
-                            desc: "Targeted practice for top tech companies (FAANG/MAANG) with curated question sets."
+                            icon: Building2,
+                            title: "Company Question Bank",
+                            desc: "The largest database of verified interview questions from Google, Meta, Anthropic, and OpenAI.",
+                            link: "/tracks",
+                            delay: "300ms"
                         },
                         {
-                            icon: GraduationCap, // Need to import
-                            title: "Role-Based Tracks",
-                            desc: "Specialized paths for ML Engineers, Data Scientists, and Research Scientists."
+                            icon: Sparkles, // Use Sparkles or similar for "Novel/Research"
+                            title: "Paper Implementations",
+                            desc: "Don't just read papers—implement them. Build Transformers, Diffusion models, and MoE from scratch.",
+                            link: "/papers", // Updated link
+                            delay: "400ms"
                         },
                         {
-                            icon: Network, // Need to import
-                            title: "System Design",
-                            desc: "Master ML System Design interviews with comprehensive architectural challenges."
+                            icon: GraduationCap,
+                            title: "Mock Interview Studio",
+                            desc: "Full-scale simulations of coding, behavioral, and system design interviews with AI grading.",
+                            link: "/mock-interview",
+                            delay: "500ms"
                         }
                     ].map((feature, i) => (
-                        <div key={i} className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-gray-700 transition-colors">
-                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400">
+                        <Link
+                            key={i}
+                            href={feature.link}
+                            className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-900/20 group animate-fade-in-up"
+                            style={{ animationDelay: feature.delay }}
+                        >
+                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
                                 <feature.icon className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                            <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
-                        </div>
+                            <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">{feature.title}</h3>
+                            <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">{feature.desc}</p>
+                        </Link>
                     ))}
                 </div>
             </div>
+
+            <style jsx>{`
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                .animate-fade-in-up {
+                    animation: fadeInUp 0.6s ease-out forwards;
+                    opacity: 0;
+                }
+            `}</style>
         </div>
     );
 }

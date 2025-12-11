@@ -65,7 +65,7 @@ export default function PaymentPage() {
     return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
             <Script
-                src="https://www.paypal.com/sdk/js?client-id=AdiUHvKx07wVXr33YRXPrAFxVD11UaYCQVOhfKUBmZwx5xo9Uj0sMEdok7eRBIPv4QxOFtU5aKNZOlR1&vault=true&intent=subscription"
+                src="https://www.paypal.com/sdk/js?client-id=ASQFa97ZFpHcXibesOK0fNG9UPWl_VWhndfJsioQtu6lrn965GtbAy11lUQhNjlNKMYOFH9GcSrkb-lj&vault=true&intent=subscription"
                 strategy="afterInteractive"
                 data-sdk-integration-source="button-factory"
                 onLoad={() => {
@@ -82,7 +82,7 @@ export default function PaymentPage() {
                                 createSubscription: (data: Record<string, unknown>, actions: any) => {
                                     return actions.subscription.create({
                                         /* Creates the subscription */
-                                        plan_id: 'P-36J38125SY7265158NE3YEXA'
+                                        plan_id: 'P-4E0838969D901543ANE5GWVA'
                                     });
                                 },
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -111,7 +111,7 @@ export default function PaymentPage() {
                                     console.error("PayPal error:", err);
                                     alert("There was an error with PayPal.");
                                 }
-                            }).render("#paypal-button-container-P-36J38125SY7265158NE3YEXA");
+                            }).render("#paypal-button-container-P-4E0838969D901543ANE5GWVA");
                         } catch (error) {
                             console.error("PayPal button render error:", error);
                         }
@@ -142,7 +142,7 @@ export default function PaymentPage() {
                         <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Payment Options</h3>
 
                         {/* PayPal Button Container */}
-                        <div id="paypal-button-container-P-36J38125SY7265158NE3YEXA" className="w-full min-h-[45px]" style={{ display: 'block' }}></div>
+                        <div id="paypal-button-container-P-4E0838969D901543ANE5GWVA" className="w-full min-h-[45px]" style={{ display: 'block' }}></div>
 
                         <div className="relative flex py-2 items-center">
                             <div className="flex-grow border-t border-gray-800"></div>
