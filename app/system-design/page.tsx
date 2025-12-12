@@ -11,9 +11,9 @@ export default function SystemDesignPage() {
 
     const handleStart = () => {
         if (status === "unauthenticated") {
-            router.push("/login?callbackUrl=/system-design");
+            router.push("/login?callbackUrl=/system-design/session");
         } else {
-            router.push("/arena?mode=system-design");
+            router.push("/system-design/session");
         }
     };
 

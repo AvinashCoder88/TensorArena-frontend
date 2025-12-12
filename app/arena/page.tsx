@@ -352,24 +352,46 @@ function ArenaContent() {
                         )
                     ) : (
                         <div className="h-full flex items-center justify-center">
-                            <div className="text-center space-y-6 max-w-md">
-                                <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto text-blue-500">
-                                    <Code2 className="w-10 h-10" />
+                            {mode === "mock-interview" ? (
+                                <div className="text-center space-y-6 max-w-md">
+                                    <div className="w-20 h-20 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-purple-500/20">
+                                        <Sparkles className="w-10 h-10 text-white" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-white mb-2">Technical Interview Session</h2>
+                                        <p className="text-gray-400">
+                                            Click &quot;Start&quot; to begin your mock interview with our AI interviewer. You&apos;ll be assessed on correctness, efficiency, and code style.
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={generateNewQuestion}
+                                        disabled={loading}
+                                        className="px-8 py-4 bg-white text-black hover:bg-gray-200 rounded-xl font-bold transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100 flex items-center justify-center space-x-2 mx-auto"
+                                    >
+                                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5 fill-current" />}
+                                        <span>{loading ? "Connecting..." : "Start Interview"}</span>
+                                    </button>
                                 </div>
-                                <div>
-                                    <h2 className="text-2xl font-bold text-white mb-2">Ready to Code?</h2>
-                                    <p className="text-gray-400">
-                                        Click &quot;Start&quot; to generate a <span className="text-blue-400 font-medium">{difficulty}</span> level <span className="text-blue-400 font-medium">{topic}</span> challenge.
-                                    </p>
+                            ) : (
+                                <div className="text-center space-y-6 max-w-md">
+                                    <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto text-blue-500">
+                                        <Code2 className="w-10 h-10" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-white mb-2">Ready to Code?</h2>
+                                        <p className="text-gray-400">
+                                            Click &quot;Start&quot; to generate a <span className="text-blue-400 font-medium">{difficulty}</span> level <span className="text-blue-400 font-medium">{topic}</span> challenge.
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={generateNewQuestion}
+                                        disabled={loading}
+                                        className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors disabled:opacity-50"
+                                    >
+                                        {loading ? "Generating..." : "Start Coding"}
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={generateNewQuestion}
-                                    disabled={loading}
-                                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors disabled:opacity-50"
-                                >
-                                    {loading ? "Generating..." : "Start Coding"}
-                                </button>
-                            </div>
+                            )}
                         </div>
                     )}
                 </div>

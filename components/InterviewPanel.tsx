@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Question } from "@/lib/api";
-import { Send, User, Bot, Loader2 } from "lucide-react";
+import { Send, Bot } from "lucide-react";
 
 interface InterviewPanelProps {
     question: Question;
@@ -140,8 +140,8 @@ ${feedback.feedback}
                     >
                         <div
                             className={`max-w-[85%] rounded-2xl p-4 ${msg.role === "user"
-                                    ? "bg-blue-600 text-white rounded-br-none"
-                                    : "bg-gray-800 text-gray-100 rounded-bl-none border border-gray-700"
+                                ? "bg-blue-600 text-white rounded-br-none"
+                                : "bg-gray-800 text-gray-100 rounded-bl-none border border-gray-700"
                                 }`}
                         >
                             <div className="prose prose-invert prose-sm max-w-none">

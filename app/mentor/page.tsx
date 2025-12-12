@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Bot, Sparkles, BookOpen, Play } from "lucide-react";
 import Link from "next/link";
@@ -11,9 +9,9 @@ export default function MentorPage() {
 
     const handleStart = () => {
         if (status === "unauthenticated") {
-            router.push("/login?callbackUrl=/mentor");
+            router.push("/login?callbackUrl=/mentor/session");
         } else {
-            router.push("/arena?mode=mentor");
+            router.push("/mentor/session");
         }
     };
 

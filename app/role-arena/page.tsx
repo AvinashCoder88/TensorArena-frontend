@@ -2,7 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Brain, ArrowRight, CheckCircle2, AlertTriangle, Lightbulb, Play, Home, Code } from "lucide-react";
+import { Brain, ArrowRight, CheckCircle2, AlertTriangle, Lightbulb, Play, ArrowLeft, Code } from "lucide-react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { api, RoleBasedQuestion } from "@/lib/api";
@@ -203,11 +203,10 @@ function RoleArenaContent() {
                             {q.type === "multiple-choice" && q.options && (
                                 <div className="space-y-3 mb-6">
                                     {q.options.map((opt: string, optIdx: number) => (
-                                        <div key={optIdx} className={`p-3 rounded border flex items-center justify-between ${
-                                            optIdx === q.correctAnswer ? 'bg-green-900/20 border-green-500/50 text-green-400' :
+                                        <div key={optIdx} className={`p-3 rounded border flex items-center justify-between ${optIdx === q.correctAnswer ? 'bg-green-900/20 border-green-500/50 text-green-400' :
                                             optIdx === userAnswers[i] ? 'bg-red-900/20 border-red-500/50 text-red-400' :
-                                            'bg-gray-800/50 border-gray-800 text-gray-500'
-                                        }`}>
+                                                'bg-gray-800/50 border-gray-800 text-gray-500'
+                                            }`}>
                                             <span>{opt}</span>
                                             {optIdx === q.correctAnswer && <CheckCircle2 className="w-5 h-5" />}
                                             {optIdx === userAnswers[i] && optIdx !== q.correctAnswer && <AlertTriangle className="w-5 h-5" />}
@@ -219,10 +218,9 @@ function RoleArenaContent() {
                             {q.type === "fill-in-blank" && (
                                 <div className="mb-6">
                                     <div className="text-sm text-gray-500 mb-2">Your answer:</div>
-                                    <div className={`p-3 rounded border ${
-                                        isCorrectAnswer(i) ? 'bg-green-900/20 border-green-500/50 text-green-400' :
+                                    <div className={`p-3 rounded border ${isCorrectAnswer(i) ? 'bg-green-900/20 border-green-500/50 text-green-400' :
                                         'bg-red-900/20 border-red-500/50 text-red-400'
-                                    }`}>
+                                        }`}>
                                         {String(userAnswers[i])}
                                     </div>
                                     <div className="text-sm text-gray-500 mt-2">Correct answer:</div>
@@ -235,11 +233,10 @@ function RoleArenaContent() {
                             {q.type === "output-selection" && q.options && (
                                 <div className="space-y-3 mb-6">
                                     {q.options.map((opt: string, optIdx: number) => (
-                                        <div key={optIdx} className={`p-3 rounded border flex items-center justify-between ${
-                                            optIdx === q.correctAnswer ? 'bg-green-900/20 border-green-500/50 text-green-400' :
+                                        <div key={optIdx} className={`p-3 rounded border flex items-center justify-between ${optIdx === q.correctAnswer ? 'bg-green-900/20 border-green-500/50 text-green-400' :
                                             optIdx === userAnswers[i] ? 'bg-red-900/20 border-red-500/50 text-red-400' :
-                                            'bg-gray-800/50 border-gray-800 text-gray-500'
-                                        }`}>
+                                                'bg-gray-800/50 border-gray-800 text-gray-500'
+                                            }`}>
                                             <code className="text-sm">{opt}</code>
                                             {optIdx === q.correctAnswer && <CheckCircle2 className="w-5 h-5" />}
                                             {optIdx === userAnswers[i] && optIdx !== q.correctAnswer && <AlertTriangle className="w-5 h-5" />}
@@ -321,16 +318,14 @@ function RoleArenaContent() {
                             <button
                                 key={idx}
                                 onClick={() => handleAnswerSelect(idx)}
-                                className={`w-full p-4 text-left rounded-xl border transition-all ${
-                                    userAnswers[currentQuestionIndex] === idx
-                                        ? 'bg-blue-600/20 border-blue-500 text-white ring-1 ring-blue-500'
-                                        : 'bg-gray-800/50 border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
-                                }`}
+                                className={`w-full p-4 text-left rounded-xl border transition-all ${userAnswers[currentQuestionIndex] === idx
+                                    ? 'bg-blue-600/20 border-blue-500 text-white ring-1 ring-blue-500'
+                                    : 'bg-gray-800/50 border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
+                                    }`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${
-                                        userAnswers[currentQuestionIndex] === idx ? 'border-blue-400 bg-blue-500 text-white' : 'border-gray-600'
-                                    }`}>
+                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${userAnswers[currentQuestionIndex] === idx ? 'border-blue-400 bg-blue-500 text-white' : 'border-gray-600'
+                                        }`}>
                                         {idx + 1}
                                     </div>
                                     {opt}
@@ -361,16 +356,14 @@ function RoleArenaContent() {
                                 <button
                                     key={idx}
                                     onClick={() => handleAnswerSelect(idx)}
-                                    className={`w-full p-4 text-left rounded-xl border transition-all font-mono text-sm ${
-                                        userAnswers[currentQuestionIndex] === idx
-                                            ? 'bg-blue-600/20 border-blue-500 text-white ring-1 ring-blue-500'
-                                            : 'bg-gray-800/50 border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
-                                    }`}
+                                    className={`w-full p-4 text-left rounded-xl border transition-all font-mono text-sm ${userAnswers[currentQuestionIndex] === idx
+                                        ? 'bg-blue-600/20 border-blue-500 text-white ring-1 ring-blue-500'
+                                        : 'bg-gray-800/50 border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
+                                        }`}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${
-                                            userAnswers[currentQuestionIndex] === idx ? 'border-blue-400 bg-blue-500 text-white' : 'border-gray-600'
-                                        }`}>
+                                        <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${userAnswers[currentQuestionIndex] === idx ? 'border-blue-400 bg-blue-500 text-white' : 'border-gray-600'
+                                            }`}>
                                             {idx + 1}
                                         </div>
                                         <code className="whitespace-pre-wrap flex-1">{opt}</code>
@@ -421,8 +414,8 @@ export default function RoleArenaPage() {
                         href="/"
                         className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
                     >
-                        <Home className="w-4 h-4" />
-                        <span>Home</span>
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Back to Hub</span>
                     </Link>
                     <div className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
                         Role-Based<span className="text-white font-light ml-1">Arena</span>
