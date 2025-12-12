@@ -14,7 +14,6 @@ import Link from "next/link";
 
 export default function ArenaPage() {
     const { data: session } = useSession();
-    const router = useRouter();
     const searchParams = useSearchParams();
     const mode = searchParams.get("mode");
 
@@ -138,6 +137,32 @@ export default function ArenaPage() {
             console.error("Failed to generate question:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const [output, setOutput] = useState<string>("");
+    const [executing, setExecuting] = useState(false);
+
+    const runCode = async () => {
+        setExecuting(true);
+        setOutput("");
+        setSubmitMessage("");
+        try {
+            const result = await api.executeCode(code);
+
+            if (result.error) {
+                setOutput(`Error:\n${result.error}`);
+                setSubmitMessage("❌ Execution failed");
+            } else {
+                setOutput(result.output);
+                setSubmitMessage("✅ Code executed successfully");
+            }
+        } catch (error) {
+            console.error("Execution error:", error);
+            setOutput("Failed to execute code. Please check your backend connection.");
+            setSubmitMessage("❌ Execution failed");
+        } finally {
+            setExecuting(false);
         }
     };
 

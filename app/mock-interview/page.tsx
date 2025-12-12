@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 export default function MockInterviewPage() {
     const router = useRouter();
-    const { data: session, status } = useSession();
+    const { status } = useSession();
 
     const handleStart = () => {
         if (status === "unauthenticated") {

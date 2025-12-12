@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Brain, Sparkles, MessageSquare, Play } from "lucide-react";
+import { ArrowLeft, Bot, Sparkles, BookOpen, Play } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -33,13 +33,13 @@ export default function MentorPage() {
                     {/* Hero */}
                     <div className="text-center mb-16 animate-fade-in-up">
                         <div className="w-20 h-20 bg-purple-500/10 rounded-2xl flex items-center justify-center mx-auto mb-8 text-purple-400">
-                            <Brain className="w-10 h-10" />
+                            <Bot className="w-10 h-10" />
                         </div>
                         <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-br from-white to-gray-500 bg-clip-text text-transparent">
                             Adaptive AI Mentor
                         </h1>
                         <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Your personal AI tutor that analyzes your code in real-time, pointing out logic gaps and suggesting optimizations.
+                            Your personalized coding coach. Get real-time feedback, hints, and explanations while you solve problems.
                         </p>
                     </div>
 
@@ -47,13 +47,13 @@ export default function MentorPage() {
                     <div className="grid md:grid-cols-2 gap-6 mb-16">
                         <div className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800">
                             <Sparkles className="w-8 h-8 text-yellow-400 mb-4" />
-                            <h3 className="text-xl font-bold mb-2">Real-time Feedback</h3>
-                            <p className="text-gray-400">Get instant analysis on your implementation details, code style, and potential edge cases as you type.</p>
+                            <h3 className="text-xl font-bold mb-2">Smart Hints</h3>
+                            <p className="text-gray-400">Stuck? The AI analyzes your personalized code and provides contextual hints without giving away the answer.</p>
                         </div>
                         <div className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800">
-                            <MessageSquare className="w-8 h-8 text-blue-400 mb-4" />
-                            <h3 className="text-xl font-bold mb-2">Interactive Guidance</h3>
-                            <p className="text-gray-400">The mentor adapts to your skill level, offering hints when you're stuck and deep dives when you're advancing.</p>
+                            <BookOpen className="w-8 h-8 text-blue-400 mb-4" />
+                            <h3 className="text-xl font-bold mb-2">Concept Explanations</h3>
+                            <p className="text-gray-400">Don&apos;t understand a topic? Ask the mentor to explain algorithms and data structures in simple terms.</p>
                         </div>
                     </div>
 
