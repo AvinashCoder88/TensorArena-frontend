@@ -106,10 +106,23 @@ export default function ArenaPage() {
                 setCurrentQuestionId(questionToUse.id || null);
             } else {
                 // Generate new question from AI
-                // Pass mode as user_context if relevant
-                const context = mode ? `User is in ${mode} mode. Focus on ${mode} related scenarios.` : undefined;
+                let newQuestion: Question;
 
-                const newQuestion = await api.generateQuestion(topic, difficulty, context);
+                // Route to correct endpoint based on mode/topic
+                if (mode === "system-design" || topic === "System Design") {
+                    newQuestion = await api.generateSystemDesignQuestion(topic, difficulty);
+                } else if (mode === "production" || topic === "Production Engineering") {
+                    newQuestion = await api.generateProductionQuestion(topic, difficulty);
+                } else if (mode === "papers" || topic === "Paper Implementation") {
+                    newQuestion = await api.generatePaperQuestion(topic, difficulty);
+                } else if (mode === "mock-interview") {
+                    newQuestion = await api.generateInterviewQuestion(topic, difficulty);
+                } else {
+                    // Standard generation
+                    const context = mode ? `User is in ${mode} mode.` : undefined;
+                    newQuestion = await api.generateQuestion(topic, difficulty, context);
+                }
+
                 setQuestion(newQuestion);
                 setCode(newQuestion.solution_template);
                 setCurrentQuestionId(null); // New AI questions might not be instantly persisted via this flow unless changed
@@ -128,31 +141,14 @@ export default function ArenaPage() {
         }
     };
 
-    const [output, setOutput] = useState<string>("");
-    const [executing, setExecuting] = useState(false);
-
-    const runCode = async () => {
-        setExecuting(true);
-        setOutput("");
-        setSubmitMessage("");
-        try {
-            const result = await api.executeCode(code);
-
-            if (result.error) {
-                setOutput(`Error:\n${result.error}`);
-                setSubmitMessage("❌ Execution failed");
-            } else {
-                setOutput(result.output);
-                setSubmitMessage("✅ Code executed successfully");
-            }
-        } catch (error) {
-            console.error("Execution error:", error);
-            setOutput("Failed to execute code. Please check your backend connection.");
-            setSubmitMessage("❌ Execution failed");
-        } finally {
-            setExecuting(false);
-        }
-    };
+    const [feedback, setFeedback] = useState<{
+        correctness_score: number;
+        efficiency_score: number;
+        style_score: number;
+        feedback: string;
+        time_complexity: string;
+        space_complexity: string;
+    } | null>(null);
 
     const handleSubmit = async () => {
         if (!currentQuestionId) {
@@ -169,6 +165,8 @@ export default function ArenaPage() {
 
         setSubmitting(true);
         setSubmitMessage("");
+        setFeedback(null); // Clear previous feedback
+
         try {
             // Execute the code first
             const result = await api.executeCode(code);
@@ -187,6 +185,19 @@ export default function ArenaPage() {
 
             if (submitResult.success) {
                 setSubmitMessage("✅ " + (submitResult.message || "Solution submitted successfully!"));
+
+                // Trigger AI Grading (especially for mock interviews, but good for all)
+                // We do this in background or await it
+                setSubmitMessage("🤖 AI is grading your submission...");
+                try {
+                    const gradingResult = await api.gradeSubmission(code, question?.title || "", question?.description || "");
+                    setFeedback(gradingResult);
+                    setSubmitMessage("✅ Graded! See feedback below.");
+                } catch (gradeError) {
+                    console.error("Grading failed:", gradeError);
+                    setSubmitMessage("✅ Submitted, but grading failed.");
+                }
+
             } else {
                 setSubmitMessage("❌ " + (submitResult.error || "Submission failed"));
             }
@@ -337,18 +348,50 @@ export default function ArenaPage() {
                         <div className="flex-1 min-h-0">
                             <CodeEditor code={code} onChange={(val) => setCode(val || "")} />
                         </div>
-                        {output && (
-                            <div className="h-1/3 mt-4 bg-gray-900 border-t border-gray-800 p-4 font-mono text-sm overflow-auto">
-                                <div className="text-gray-500 mb-2 text-xs uppercase tracking-wider">Output</div>
-                                <pre className="whitespace-pre-wrap">{output}</pre>
+                        {/* Output / Feedback Area */}
+                        <div className="h-1/3 mt-4 bg-gray-900 border-t border-gray-800 p-4 font-mono text-sm overflow-auto">
+                            <div className="flex items-center space-x-4 border-b border-gray-800 pb-2 mb-2">
+                                <span className={`text-xs uppercase tracking-wider cursor-pointer ${!feedback ? "text-white font-bold" : "text-gray-500"}`} onClick={() => setFeedback(null)}>Output</span>
+                                {feedback && <span className="text-xs uppercase tracking-wider text-green-400 font-bold">Feedback Enclosed</span>}
                             </div>
-                        )}
+
+                            {feedback ? (
+                                <div className="space-y-4 animate-fade-in">
+                                    <div className="flex space-x-6">
+                                        <div className="text-center">
+                                            <div className="text-3xl font-bold text-green-400">{feedback.correctness_score}/10</div>
+                                            <div className="text-xs text-gray-400 uppercase">Correctness</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-3xl font-bold text-blue-400">{feedback.efficiency_score}/10</div>
+                                            <div className="text-xs text-gray-400 uppercase">Efficiency</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-3xl font-bold text-purple-400">{feedback.style_score}/10</div>
+                                            <div className="text-xs text-gray-400 uppercase">Style</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="text-gray-400 mb-1">Complexity:</div>
+                                        <div className="flex space-x-4 text-sm">
+                                            <span className="px-2 py-1 bg-gray-800 rounded">Time: {feedback.time_complexity}</span>
+                                            <span className="px-2 py-1 bg-gray-800 rounded">Space: {feedback.space_complexity}</span>
+                                        </div>
+                                    </div>
+                                    <div className="prose prose-invert prose-sm">
+                                        <p className="whitespace-pre-wrap">{feedback.feedback}</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <pre className="whitespace-pre-wrap text-gray-300">{output || "Run code to see output..."}</pre>
+                            )}
+                        </div>
                     </div>
 
                     {/* Action Bar */}
                     <div className="h-16 border-t border-gray-800 flex items-center justify-between px-6 bg-gray-900/30">
                         {submitMessage && (
-                            <div className="text-sm font-medium">
+                            <div className="text-sm font-medium animate-pulse text-blue-400">
                                 {submitMessage}
                             </div>
                         )}

@@ -92,4 +92,58 @@ export const api = {
 
         return response.json();
     },
+
+    generateSystemDesignQuestion: async (topic: string, difficulty: string): Promise<Question> => {
+        const response = await fetch(`${API_BASE_URL}/generate_system_design_question`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic, difficulty }),
+        });
+        if (!response.ok) throw new Error("Failed to generate system design question");
+        return response.json();
+    },
+
+    generateProductionQuestion: async (topic: string, difficulty: string): Promise<Question> => {
+        const response = await fetch(`${API_BASE_URL}/generate_production_question`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic, difficulty }),
+        });
+        if (!response.ok) throw new Error("Failed to generate production question");
+        return response.json();
+    },
+
+    generatePaperQuestion: async (topic: string, difficulty: string): Promise<Question> => {
+        const response = await fetch(`${API_BASE_URL}/generate_paper_question`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic, difficulty }),
+        });
+        if (!response.ok) throw new Error("Failed to generate paper question");
+        return response.json();
+    },
+
+    generateInterviewQuestion: async (topic: string, difficulty: string): Promise<Question> => {
+        const response = await fetch(`${API_BASE_URL}/generate_interview_question`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic, difficulty }),
+        });
+        if (!response.ok) throw new Error("Failed to generate interview question");
+        return response.json();
+    },
+
+    gradeSubmission: async (code: string, questionTitle: string, questionDescription: string) => {
+        const response = await fetch(`${API_BASE_URL}/grade_submission`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                code,
+                question_title: questionTitle,
+                question_description: questionDescription
+            }),
+        });
+        if (!response.ok) throw new Error("Failed to grade submission");
+        return response.json();
+    },
 };
