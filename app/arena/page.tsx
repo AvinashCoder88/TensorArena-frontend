@@ -9,7 +9,7 @@ import { incrementQuestionUsage, checkQuestionLimit } from "@/app/actions/questi
 import { saveQuestion, getUnseenQuestion, submitSolution, markQuestionAsSeen } from "@/app/actions/questionPersistence";
 import { Loader2, Play, RefreshCw, Send, Sparkles, LogOut, Code2, ArrowLeft } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function ArenaPage() {

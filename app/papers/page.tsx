@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, BookOpen, PenTool, Layout, Play, FileText, Code } from "lucide-react";
+import { ArrowLeft, BookOpen, Play, FileText, Code } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
