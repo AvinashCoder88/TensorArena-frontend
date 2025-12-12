@@ -12,7 +12,9 @@ import { useSession, signOut } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function ArenaPage() {
+import { Suspense } from "react";
+
+function ArenaContent() {
     const { data: session } = useSession();
     const searchParams = useSearchParams();
     const mode = searchParams.get("mode");
@@ -449,5 +451,17 @@ export default function ArenaPage() {
                 questionsUsed={questionStats.questionsUsed}
             />
         </div>
+    );
+}
+
+export default function ArenaPage() {
+    return (
+        <Suspense fallback={
+            <div className="h-screen w-full bg-black flex items-center justify-center text-white">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            </div>
+        }>
+            <ArenaContent />
+        </Suspense>
     );
 }
