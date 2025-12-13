@@ -1,6 +1,6 @@
 "use client";
 
-import SystemDesignChat from "@/components/SystemDesignChat";
+import MLPlayground from "@/components/ml-playground/MLPlayground";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 function SystemDesignContent() {
-    return <SystemDesignChat />;
+    return <MLPlayground />;
 }
 
 export default function SystemDesignSessionPage() {
@@ -44,7 +44,7 @@ export default function SystemDesignSessionPage() {
             </header>
 
             <main className="pt-24 px-6 pb-12 h-screen flex flex-col">
-                <div className="max-w-5xl mx-auto w-full flex-1">
+                <div className="w-full h-full flex-1">
                     <Suspense fallback={<div className="text-white">Loading session...</div>}>
                         <SystemDesignContent />
                     </Suspense>

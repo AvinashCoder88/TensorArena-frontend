@@ -146,4 +146,60 @@ export const api = {
         if (!response.ok) throw new Error("Failed to grade submission");
         return response.json();
     },
+
+    uploadCSV: async (file: File): Promise<{ file_id: string; metadata: CSVMetadata }> => {
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await fetch(`${API_BASE_URL}/ml/upload`, {
+            method: "POST",
+            body: formData,
+        });
+        if (!response.ok) throw new Error("Failed to upload CSV");
+        return response.json();
+    },
+
+    trainMLModel: async (fileId: string, targetColumn: string, modelType: string, taskType: string = "classification"): Promise<MLTrainingResult> => {
+        const response = await fetch(`${API_BASE_URL}/ml/train`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                file_id: fileId,
+                target_column: targetColumn,
+                model_type: modelType,
+                task_type: taskType
+            }),
+        });
+        if (!response.ok) throw new Error("Failed to train model");
+        return response.json();
+    },
+
+    getMLInsight: async (results: MLTrainingResult, modelType: string): Promise<{ insight: string }> => {
+        const response = await fetch(`${API_BASE_URL}/ml/insight`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ results, model_type: modelType }),
+        });
+        if (!response.ok) throw new Error("Failed to generate insight");
+        return response.json();
+    },
 };
+
+export interface CSVMetadata {
+    columns: string[];
+    head: Record<string, unknown>[];
+    shape: [number, number];
+    dtypes: Record<string, string>;
+    summary: Record<string, unknown>;
+}
+
+export interface MLTrainingResult {
+    metrics: {
+        accuracy?: number;
+        classification_report?: string | Record<string, unknown>;
+        confusion_matrix?: number[][];
+        [key: string]: unknown;
+    };
+    feature_importance?: Record<string, number>;
+    error?: string;
+    model_type?: string;
+}

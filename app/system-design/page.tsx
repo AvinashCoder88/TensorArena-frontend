@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Network, Server, Play, Shield } from "lucide-react";
+import { ArrowLeft, Brain, Database, Play, Binary } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -33,27 +33,27 @@ export default function SystemDesignPage() {
                     {/* Hero */}
                     <div className="text-center mb-16 animate-fade-in-up">
                         <div className="w-20 h-20 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-8 text-blue-400">
-                            <Network className="w-10 h-10" />
+                            <Brain className="w-10 h-10" />
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-br from-white to-gray-500 bg-clip-text text-transparent">
-                            System Design Arena
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-br from-white to-blue-400 bg-clip-text text-transparent">
+                            ML Model Arena
                         </h1>
                         <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Architect scalable AI infrastructure. From distributed training clusters to low-latency inference pipelines, master the systems that power modern AI.
+                            Interactive Algorithm Playground. Visualize and master core machine learning algorithms like Logistic Regression, K-Means, and KNN on real-time data.
                         </p>
                     </div>
 
                     {/* Features */}
                     <div className="grid md:grid-cols-2 gap-6 mb-16">
+                        <Link href="/system-design/session" onClick={handleStart} className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all cursor-pointer group">
+                            <Binary className="w-8 h-8 text-purple-400 mb-4 group-hover:scale-110 transition-transform" />
+                            <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">Interactive Visualization</h3>
+                            <p className="text-gray-400">Watch decision boundaries form in real-time. Generate synthetic datasets and train models directly in your browser.</p>
+                        </Link>
                         <div className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800">
-                            <Server className="w-8 h-8 text-purple-400 mb-4" />
-                            <h3 className="text-xl font-bold mb-2">Distributed Training</h3>
-                            <p className="text-gray-400">Design clusters for training LLMs across thousands of GPUs. Handle sharding, gradients, and fault tolerance.</p>
-                        </div>
-                        <div className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800">
-                            <Shield className="w-8 h-8 text-green-400 mb-4" />
-                            <h3 className="text-xl font-bold mb-2">Inference at Scale</h3>
-                            <p className="text-gray-400">Optimize for low-latency token generation, KV caching, and batching strategies for millions of concurrent users.</p>
+                            <Database className="w-8 h-8 text-green-400 mb-4" />
+                            <h3 className="text-xl font-bold mb-2">Algorithm Deep Dive</h3>
+                            <p className="text-gray-400">Experiment with hyperparameters like Learning Rate, Epochs, and K-values to understand their impact on model performance.</p>
                         </div>
                     </div>
 
@@ -63,12 +63,12 @@ export default function SystemDesignPage() {
                             onClick={handleStart}
                             className="group relative px-10 py-5 bg-white text-black rounded-full font-bold text-xl hover:bg-gray-100 transition-all hover:scale-105 active:scale-95 mx-auto flex items-center gap-3"
                         >
-                            <span>Start Practicing Now</span>
+                            <span>Start Experimenting</span>
                             <Play className="w-5 h-5 fill-current" />
                             <div className="absolute inset-0 rounded-full bg-white/20 blur-xl group-hover:blur-2xl transition-all opacity-0 group-hover:opacity-100" />
                         </button>
                         <p className="mt-4 text-sm text-gray-500">
-                            *Requires login to access the arena
+                            *Requires login to save progress (Optional)
                         </p>
                     </div>
                 </div>
