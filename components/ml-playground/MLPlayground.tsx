@@ -345,9 +345,25 @@ export default function MLPlayground() {
                                                         })()}
                                                     />
                                                 </div>
-                                                <p className="text-sm text-gray-500 mt-2 italic">
-                                                    Showing a sample of test data. Points are colored by their true class.
-                                                </p>
+                                                <div className="mt-4 bg-gray-800/50 rounded-lg p-3 text-sm text-gray-400">
+                                                    <details className="cursor-pointer group">
+                                                        <summary className="font-medium text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+                                                            <div className="w-4 h-4 rounded-full border border-gray-500 flex items-center justify-center text-[10px]">?</div>
+                                                            How to read this plot?
+                                                        </summary>
+                                                        <div className="mt-2 pl-6 space-y-2 text-xs leading-relaxed">
+                                                            <p>
+                                                                <strong className="text-gray-300">Axes:</strong> The X and Y axes represent the two most important features (variables) that the model found in your data.
+                                                            </p>
+                                                            <p>
+                                                                <strong className="text-gray-300">Colors:</strong> Points are colored by their <em>true</em> class (e.g., Red vs Blue).
+                                                            </p>
+                                                            <p>
+                                                                <strong className="text-gray-300">Goal:</strong> You want to see distinct clusters of colors. If the red and blue points are well-separated, the model can easily distinguish them using these two features. If they are mixed together ("soup"), these features alone are not enough, or the problem is difficult (non-linear).
+                                                            </p>
+                                                        </div>
+                                                    </details>
+                                                </div>
                                             </div>
                                         )}
 
