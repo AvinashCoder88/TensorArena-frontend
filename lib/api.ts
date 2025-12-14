@@ -200,6 +200,10 @@ export interface MLTrainingResult {
         [key: string]: unknown;
     };
     feature_importance?: Record<string, number>;
+    visualization?: {
+        features: string[];
+        data: { x: number; y: number; label: string | number; prediction: string | number }[];
+    };
     error?: string;
     model_type?: string;
 }

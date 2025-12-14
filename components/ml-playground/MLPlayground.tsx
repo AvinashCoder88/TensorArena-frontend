@@ -305,7 +305,53 @@ export default function MLPlayground() {
                                     </div>
                                 ) : (
                                     <div className="space-y-8">
-                                        {/* Insight Block */}
+                                        {/* 1. Interactive Visualization */}
+                                        {csvResults.visualization && csvResults.visualization.data.length > 0 && (
+                                            <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 relative">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h3 className="text-xl font-bold text-blue-400 flex items-center gap-2">
+                                                        <BarChart className="w-5 h-5" />
+                                                        Feature Space Visualization
+                                                    </h3>
+                                                    <div className="text-xs text-gray-500">
+                                                        Plotting {csvResults.visualization.features[0]} (x) vs {csvResults.visualization.features[1]} (y)
+                                                    </div>
+                                                </div>
+                                                <div className="h-64 w-full bg-black/40 rounded-lg overflow-hidden relative border border-gray-700">
+                                                    {/* We need to normalize the CSV data to 0-100 for the DataCanvas */}
+                                                    <DataCanvas
+                                                        mode="view"
+                                                        setPoints={() => { }}
+                                                        points={(() => {
+                                                            const data = csvResults.visualization.data;
+                                                            // Find min/max for normalization
+                                                            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+                                                            data.forEach(d => {
+                                                                if (d.x < minX) minX = d.x;
+                                                                if (d.x > maxX) maxX = d.x;
+                                                                if (d.y < minY) minY = d.y;
+                                                                if (d.y > maxY) maxY = d.y;
+                                                            });
+
+                                                            // Add 5% padding
+                                                            const padX = (maxX - minX) * 0.05 || 1;
+                                                            const padY = (maxY - minY) * 0.05 || 1;
+
+                                                            return data.map(d => ({
+                                                                x: ((d.x - (minX - padX)) / ((maxX + padX) - (minX - padX))) * 100,
+                                                                y: 100 - ((d.y - (minY - padY)) / ((maxY + padY) - (minY - padY))) * 100, // Flip Y for canvas coords
+                                                                label: typeof d.label === 'string' ? (d.label === '1' || d.label === 'Yes' ? 1 : 0) : d.label as number
+                                                            }));
+                                                        })()}
+                                                    />
+                                                </div>
+                                                <p className="text-sm text-gray-500 mt-2 italic">
+                                                    Showing a sample of test data. Points are colored by their true class.
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        {/* 2. AI Insight */}
                                         <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-xl p-6 relative">
                                             <div className="flex items-center gap-2 mb-4 text-blue-300">
                                                 <Brain className="w-5 h-5" />
@@ -314,7 +360,7 @@ export default function MLPlayground() {
                                             {loadingInsight ? (
                                                 <div className="flex items-center gap-2 text-gray-400">
                                                     <RotateCcw className="w-4 h-4 animate-spin" />
-                                                    <span>Gemini is analyzing your model...</span>
+                                                    <span>TensorArena is analyzing your model...</span>
                                                 </div>
                                             ) : (
                                                 <div className="prose prose-invert prose-sm max-w-none">
@@ -323,37 +369,56 @@ export default function MLPlayground() {
                                             )}
                                         </div>
 
-                                        {/* Formatting Feature Importance */}
-                                        {csvResults.feature_importance && (
-                                            <div>
-                                                <h3 className="text-xl font-bold text-gray-300 mb-4 flex items-center gap-2">
-                                                    <BarChart className="w-5 h-5" />
-                                                    Feature Importance
-                                                </h3>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    {Object.entries(csvResults.feature_importance)
-                                                        .sort(([, a], [, b]) => (b as number) - (a as number))
-                                                        .slice(0, 8)
-                                                        .map(([k, v]) => (
-                                                            <div key={k} className="bg-black/40 rounded p-3 flex justify-between items-center group hover:bg-black/60 transition-colors">
-                                                                <span className="text-sm font-mono text-gray-400 group-hover:text-white">{k}</span>
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="w-24 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                                                                        <div className="h-full bg-blue-500" style={{ width: `${Math.min((v as number) * 100, 100)}%` }}></div>
+                                        {/* 3. Feature Importance & educational features */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            {csvResults.feature_importance && (
+                                                <div>
+                                                    <h3 className="text-xl font-bold text-gray-300 mb-2 flex items-center gap-2">
+                                                        <BarChart className="w-5 h-5" />
+                                                        Feature Importance
+                                                    </h3>
+                                                    <p className="text-xs text-gray-500 mb-4">
+                                                        These weights indicate how significantly each input variable influences the model's prediction. Higher absolute values mean the feature is more critical for the decision boundary.
+                                                    </p>
+                                                    <div className="space-y-2">
+                                                        {Object.entries(csvResults.feature_importance)
+                                                            .sort(([, a], [, b]) => (b as number) - (a as number))
+                                                            .slice(0, 8)
+                                                            .map(([k, v]) => (
+                                                                <div key={k} className="bg-black/40 rounded p-3 flex justify-between items-center group hover:bg-black/60 transition-colors">
+                                                                    <span className="text-sm font-mono text-gray-400 group-hover:text-white truncate max-w-[150px]" title={k}>{k}</span>
+                                                                    <div className="flex items-center gap-2 flex-1 justify-end ml-2">
+                                                                        <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden max-w-[100px]">
+                                                                            <div className="h-full bg-blue-500" style={{ width: `${Math.min(Math.abs(v as number) * 100, 100)}%` }}></div>
+                                                                        </div>
+                                                                        <span className="text-xs text-blue-400 w-12 text-right">{(v as number).toFixed(3)}</span>
                                                                     </div>
-                                                                    <span className="text-xs text-blue-400 w-12 text-right">{(v as number).toFixed(3)}</span>
                                                                 </div>
-                                                            </div>
-                                                        ))}
+                                                            ))}
+                                                    </div>
                                                 </div>
+                                            )}
+
+                                            {/* Model Education Card */}
+                                            <div className="bg-gray-800/20 border border-gray-700/50 rounded-xl p-6">
+                                                <h3 className="text-lg font-bold text-gray-300 mb-3">Model Architecture: {csvModel.replace('_', ' ')}</h3>
+                                                <p className="text-sm text-gray-400 leading-relaxed">
+                                                    {csvModel === 'logistic_regression' && "Logistic Regression is a fundamental classification algorithm that models the probability of a specific class or event existing. Ideally used for binary classification tasks."}
+                                                    {csvModel === 'random_forest' && "Random Forest is an ensemble method that operates by constructing a multitude of decision trees at training time. It is robust to overfitting and works well with non-linear comparisons."}
+                                                    {csvModel === 'svm' && "Support Vector Machines (SVM) find a hyperplane in an N-dimensional space that distinctly classifies the data points. Effective in high dimensional spaces."}
+                                                    {csvModel === 'gradient_boosting' && "Gradient Boosting produces a prediction model in the form of an ensemble of weak prediction models, typically decision trees. It builds keys sequentially to minimize errors."}
+                                                    {csvModel === 'decision_tree' && "A Decision Tree determines the output by tracing the path from the root node to a leaf node using if-this-then-that logic learned from data features."}
+                                                    {csvModel === 'naive_bayes' && "Naive Bayes classifiers are a family of simple probabilistic classifiers based on applying Bayes' theorem with strong independence assumptions between the features."}
+                                                    {csvModel === 'kmeans' && "K-Means is an unsupervised learning algorithm that partitions data into K distinct clusters based on feature similarity."}
+                                                </p>
                                             </div>
-                                        )}
+                                        </div>
 
                                         {/* Raw Details */}
-                                        <div className="mt-8">
+                                        <div className="mt-8 border-t border-gray-800 pt-4">
                                             <details className="cursor-pointer group">
                                                 <summary className="text-gray-500 text-sm hover:text-white transition-colors">View Raw JSON Report</summary>
-                                                <pre className="mt-4 p-4 bg-black rounded-lg text-xs font-mono text-gray-500 overflow-x-auto">
+                                                <pre className="mt-4 p-4 bg-black rounded-lg text-xs font-mono text-gray-500 overflow-x-auto max-h-64">
                                                     {JSON.stringify(csvResults, null, 2)}
                                                 </pre>
                                             </details>
