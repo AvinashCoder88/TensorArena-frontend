@@ -378,7 +378,7 @@ export default function MLPlayground() {
                                                         Feature Importance
                                                     </h3>
                                                     <p className="text-xs text-gray-500 mb-4">
-                                                        These weights indicate how significantly each input variable influences the model's prediction. Higher absolute values mean the feature is more critical for the decision boundary.
+                                                        These weights indicate how significantly each input variable influences the model&apos;s prediction. Higher absolute values mean the feature is more critical for the decision boundary.
                                                     </p>
                                                     <div className="space-y-2">
                                                         {Object.entries(csvResults.feature_importance)
