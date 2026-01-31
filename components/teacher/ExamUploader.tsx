@@ -1,11 +1,10 @@
-
 "use client";
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, AlertCircle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ExamUploaderProps {
-    onUploadSuccess: (result: any) => void;
+    onUploadSuccess: (result: unknown) => void;
 }
 
 export const ExamUploader: React.FC<ExamUploaderProps> = ({ onUploadSuccess }) => {
@@ -49,8 +48,12 @@ export const ExamUploader: React.FC<ExamUploaderProps> = ({ onUploadSuccess }) =
 
             const result = await response.json();
             onUploadSuccess(result);
-        } catch (err: any) {
-            setError(err.message || "Something went wrong.");
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Something went wrong.");
+            }
         } finally {
             setIsUploading(false);
         }

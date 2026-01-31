@@ -1,17 +1,39 @@
-
+```typescript
 "use client";
 
 import React, { useState } from 'react';
 import { ExamUploader } from '@/components/teacher/ExamUploader';
-import { Upload, Users, Award, TrendingUp, AlertTriangle, BookOpen } from 'lucide-react';
+import { Users, Award, TrendingUp, AlertTriangle, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface Submission {
+    student_name: string;
+    score: number;
+    status: string;
+    summary: string;
+    details?: string;
+}
+
+interface Ranking {
+    name: string;
+    score: number;
+}
+
+interface ClassInsights {
+    average_score: number;
+    highest_score: number;
+    lowest_score: number;
+    ranking: Ranking[];
+    recommendations: string;
+    common_mistakes?: string[];
+}
+
 export default function TeacherPage() {
-    const [submissions, setSubmissions] = useState<any[]>([]);
-    const [insights, setInsights] = useState<any>(null);
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
+    const [insights, setInsights] = useState<ClassInsights | null>(null);
     const [generatingInsights, setGeneratingInsights] = useState(false);
 
-    const handleUploadSuccess = async (result: any) => {
+    const handleUploadSuccess = async (result: Submission) => {
         setSubmissions(prev => [...prev, result]);
 
         // Auto-refresh insights if we have enough data (e.g., > 2) or manual trigger
@@ -29,7 +51,7 @@ export default function TeacherPage() {
             });
             const data = await response.json();
             setInsights(data);
-        } catch (e) {
+        } catch (e: unknown) {
             console.error(e);
         } finally {
             setGeneratingInsights(false);
@@ -84,7 +106,7 @@ export default function TeacherPage() {
                                                     <p className="font-semibold text-white">{sub.student_name || "Unknown"}</p>
                                                     <p className="text-xs text-gray-400">Status: {sub.status}</p>
                                                 </div>
-                                                <span className={`text-lg font-bold ${getScoreColor(sub.score)}`}>
+                                                <span className={`text - lg font - bold ${ getScoreColor(sub.score) } `}>
                                                     {sub.score}%
                                                 </span>
                                             </div>
@@ -110,17 +132,17 @@ export default function TeacherPage() {
                                 <div className="grid grid-cols-3 gap-4">
                                     <StatCard
                                         label="Class Average"
-                                        value={`${Math.round(insights.average_score)}%`}
+                                        value={`${ Math.round(insights.average_score) }% `}
                                         icon={<TrendingUp className="w-5 h-5 text-green-400" />}
                                     />
                                     <StatCard
                                         label="Highest Score"
-                                        value={`${Math.round(insights.highest_score)}%`}
+                                        value={`${ Math.round(insights.highest_score) }% `}
                                         icon={<Award className="w-5 h-5 text-yellow-400" />}
                                     />
                                     <StatCard
                                         label="Lowest Score"
-                                        value={`${Math.round(insights.lowest_score)}%`}
+                                        value={`${ Math.round(insights.lowest_score) }% `}
                                         icon={<AlertTriangle className="w-5 h-5 text-red-400" />}
                                     />
                                 </div>
@@ -132,10 +154,10 @@ export default function TeacherPage() {
                                         Class Leaderboard
                                     </h3>
                                     <div className="space-y-2">
-                                        {insights.ranking?.map((student: any, idx: number) => (
+                                        {insights.ranking?.map((student: Ranking, idx: number) => (
                                             <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-gray-800 transition-colors">
                                                 <div className="flex items-center gap-4">
-                                                    <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold ${idx < 3 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-700 text-gray-400'}`}>
+                                                    <span className={`w - 6 h - 6 flex items - center justify - center rounded - full text - xs font - bold ${ idx < 3 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-700 text-gray-400' } `}>
                                                         {idx + 1}
                                                     </span>
                                                     <span>{student.name}</span>
@@ -176,7 +198,7 @@ export default function TeacherPage() {
                                     </div>
                                     <h3 className="text-xl font-bold text-gray-300 mb-2">No Insights Yet</h3>
                                     <p className="text-gray-500">
-                                        Upload verified exam papers and click "Analyze Class" to generate detailed performance metrics and learning recommendations.
+                                        Upload verified exam papers and click &quot;Analyze Class&quot; to generate detailed performance metrics and learning recommendations.
                                     </p>
                                 </div>
                             </div>
