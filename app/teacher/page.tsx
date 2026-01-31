@@ -32,8 +32,9 @@ export default function TeacherPage() {
     const [insights, setInsights] = useState<ClassInsights | null>(null);
     const [generatingInsights, setGeneratingInsights] = useState(false);
 
-    const handleUploadSuccess = async (result: Submission) => {
-        setSubmissions(prev => [...prev, result]);
+    const handleUploadSuccess = async (result: unknown) => {
+        const submission = result as Submission;
+        setSubmissions(prev => [...prev, submission]);
 
         // Auto-refresh insights if we have enough data (e.g., > 2) or manual trigger
         // For UX, let's keep it manual or auto?
