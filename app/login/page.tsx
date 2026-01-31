@@ -1,5 +1,7 @@
 
 
+
+import { Suspense } from "react";
 import LoginForm from "./login-form";
 
 export default function Page() {
@@ -13,7 +15,9 @@ export default function Page() {
 
             {/* Content */}
             <div className="relative z-20 w-full max-w-md p-4">
-                <LoginForm />
+                <Suspense fallback={<div className="text-white text-center">Loading...</div>}>
+                    <LoginForm />
+                </Suspense>
             </div>
         </div>
     );
