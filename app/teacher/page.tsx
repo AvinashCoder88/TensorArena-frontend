@@ -44,7 +44,7 @@ export default function TeacherPage() {
     const generateClassInsights = async () => {
         setGeneratingInsights(true);
         try {
-            const response = await fetch("http://localhost:8000/teacher/analyze-batch", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/teacher/analyze-batch`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ submissions })

@@ -39,7 +39,7 @@ export const ExamUploader: React.FC<ExamUploaderProps> = ({ onUploadSuccess }) =
         formData.append("file", file);
 
         try {
-            const response = await fetch("http://localhost:8000/teacher/upload", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/teacher/upload`, {
                 method: "POST",
                 body: formData,
             });
