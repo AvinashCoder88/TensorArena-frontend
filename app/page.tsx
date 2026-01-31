@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck } from "lucide-react";
+import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -119,6 +119,13 @@ export default function Home() {
                             desc: "Full-scale simulations of coding, behavioral, and system design interviews with AI grading.",
                             link: "/mock-interview",
                             delay: "500ms"
+                        },
+                        {
+                            icon: BookOpen,
+                            title: "Teacher Block",
+                            desc: "Automated exam grading, student ranking, and class-wide performance insights.",
+                            link: "/teacher",
+                            delay: "600ms"
                         }
                     ].map((feature, i) => (
                         <Link
