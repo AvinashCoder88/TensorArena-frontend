@@ -109,6 +109,7 @@ model UserQuestionAttempt {
   @@index([userId])
 }
 
+
 model SubscriptionCode {
   id        String   @id @default(cuid())
   code      String   @unique
@@ -121,4 +122,26 @@ model SubscriptionCode {
   
   @@index([code])
   @@index([isUsed])
+}
+
+model Exam {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  submissions ExamSubmission[]
+}
+
+model ExamSubmission {
+  id          String   @id @default(cuid())
+  examId      String?
+  studentName String?
+  score       Int?
+  status      String   @default("Pending") // Pending, Graded
+  summary     String?  @db.Text
+  details     String?  @db.Text // JSON string of graded questions
+  createdAt   DateTime @default(now())
+  
+  exam        Exam?    @relation(fields: [examId], references: [id], onDelete: SetNull)
 }
