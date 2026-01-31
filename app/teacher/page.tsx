@@ -1,4 +1,3 @@
-```typescript
 "use client";
 
 import React, { useState } from 'react';
@@ -106,7 +105,7 @@ export default function TeacherPage() {
                                                     <p className="font-semibold text-white">{sub.student_name || "Unknown"}</p>
                                                     <p className="text-xs text-gray-400">Status: {sub.status}</p>
                                                 </div>
-                                                <span className={`text - lg font - bold ${ getScoreColor(sub.score) } `}>
+                                                <span className={`text - lg font - bold ${getScoreColor(sub.score)} `}>
                                                     {sub.score}%
                                                 </span>
                                             </div>
@@ -132,17 +131,17 @@ export default function TeacherPage() {
                                 <div className="grid grid-cols-3 gap-4">
                                     <StatCard
                                         label="Class Average"
-                                        value={`${ Math.round(insights.average_score) }% `}
+                                        value={`${Math.round(insights.average_score)}% `}
                                         icon={<TrendingUp className="w-5 h-5 text-green-400" />}
                                     />
                                     <StatCard
                                         label="Highest Score"
-                                        value={`${ Math.round(insights.highest_score) }% `}
+                                        value={`${Math.round(insights.highest_score)}% `}
                                         icon={<Award className="w-5 h-5 text-yellow-400" />}
                                     />
                                     <StatCard
                                         label="Lowest Score"
-                                        value={`${ Math.round(insights.lowest_score) }% `}
+                                        value={`${Math.round(insights.lowest_score)}% `}
                                         icon={<AlertTriangle className="w-5 h-5 text-red-400" />}
                                     />
                                 </div>
@@ -157,7 +156,7 @@ export default function TeacherPage() {
                                         {insights.ranking?.map((student: Ranking, idx: number) => (
                                             <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-gray-800 transition-colors">
                                                 <div className="flex items-center gap-4">
-                                                    <span className={`w - 6 h - 6 flex items - center justify - center rounded - full text - xs font - bold ${ idx < 3 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-700 text-gray-400' } `}>
+                                                    <span className={`w - 6 h - 6 flex items - center justify - center rounded - full text - xs font - bold ${idx < 3 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-700 text-gray-400'} `}>
                                                         {idx + 1}
                                                     </span>
                                                     <span>{student.name}</span>
