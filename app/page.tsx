@@ -1,10 +1,22 @@
 "use client";
 
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen, Users, Briefcase, Layers, ClipboardCheck, TrendingUp } from "lucide-react";
 import { ROLE_LABELS, ROLE_DESCRIPTIONS } from "@/lib/services";
 
 export default function Home() {
+    useEffect(() => {
+        // Restore scroll position if returning from a role link
+        const savedScroll = sessionStorage.getItem("homeScrollY");
+        if (savedScroll) {
+            // slight delay to ensure layout is painted
+            setTimeout(() => {
+                window.scrollTo({ top: parseInt(savedScroll, 10), behavior: "instant" });
+            }, 10);
+            sessionStorage.removeItem("homeScrollY");
+        }
+    }, []);
     return (
         <div className="min-h-screen bg-black text-white selection:bg-blue-500/30">
             {/* Hero Section */}
@@ -103,6 +115,7 @@ export default function Home() {
                         <Link
                             key={role.key}
                             href={role.link}
+                            onClick={() => sessionStorage.setItem("homeScrollY", window.scrollY.toString())}
                             className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-900/20 group"
                         >
                             <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
