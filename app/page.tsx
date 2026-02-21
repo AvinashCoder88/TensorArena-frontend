@@ -1,23 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen, Users, Briefcase } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen, Users, Briefcase, Layers, ClipboardCheck, TrendingUp } from "lucide-react";
 import { ROLE_LABELS, ROLE_DESCRIPTIONS } from "@/lib/services";
 
 export default function Home() {
-    const { data: session } = useSession();
-    const router = useRouter();
-
-    const handleStartCoding = () => {
-        if (session) {
-            router.push("/arena");
-        } else {
-            router.push("/login");
-        }
-    };
-
     return (
         <div className="min-h-screen bg-black text-white selection:bg-blue-500/30">
             {/* Hero Section */}
@@ -28,53 +15,81 @@ export default function Home() {
                     <div className="max-w-4xl mx-auto text-center space-y-8">
                         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium animate-fade-in">
                             <Sparkles className="w-4 h-4" />
-                            <span>The Future of AI Learning</span>
+                            <span>AI Learning Academy</span>
                         </div>
 
                         <h1 className="text-6xl md:text-7xl font-bold tracking-tight bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
-                            Master AI Engineering <br />
-                            <span className="text-blue-500">One Prompt at a Time</span>
+                            TensorArena <br />
+                            <span className="text-blue-500">The AI Learning Academy</span>
                         </h1>
 
                         <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            An adaptive learning platform powered by state-of-the-art LLMs.
-                            From Python basics to advanced GenAI agents, we generate the perfect
-                            challenge for your skill level.
+                            Role-based tools for teaching, learning, and career growth. From class
+                            insights to interview prep, we make AI learning structured, practical,
+                            and measurable.
                         </p>
 
                         <div className="flex flex-col items-center justify-center space-y-4 pt-8">
                             <div className="flex items-center space-x-4">
-                                <button
-                                    onClick={handleStartCoding}
+                                <Link
+                                    href="/services"
                                     className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105 active:scale-95"
                                 >
-                                    Start Learning
+                                    Explore Services
                                     <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     <div className="absolute inset-0 rounded-full bg-white/20 blur-xl group-hover:blur-2xl transition-all opacity-0 group-hover:opacity-100" />
-                                </button>
+                                </Link>
                                 <button
                                     onClick={() => {
-                                        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+                                        document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' });
                                     }}
                                     className="px-8 py-4 rounded-full font-bold text-lg border border-gray-800 hover:bg-gray-900 transition-colors flex items-center gap-2"
                                 >
-                                    Explore Features
+                                    Choose Your Role
                                     <ArrowDown className="w-5 h-5" />
                                 </button>
                             </div>
                             <p className="text-sm text-gray-500 font-medium bg-gray-900/50 px-4 py-2 rounded-full border border-gray-800">
-                                <span className="text-blue-400">✨ Free Plan:</span> Includes 5 complimentary interactions across all arenas.
+                                Built for classrooms, teams, and self-learners.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Features Grid */}
             <div className="container mx-auto px-6 py-24 border-t border-gray-900">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Explore by Role</h2>
-                    <p className="text-gray-400 text-lg">Start with the services tailored to you</p>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">What We Do</h2>
+                    <p className="text-gray-400 text-lg">A clear, structured academy for every learning journey</p>
+                </div>
+
+                <div className="grid md:grid-cols-5 gap-6">
+                    {[
+                        { icon: ClipboardCheck, title: "Assess", desc: "Exams, grading, and validation at scale." },
+                        { icon: BookOpen, title: "Teach", desc: "Lesson tools, content builders, and insights." },
+                        { icon: Layers, title: "Learn", desc: "Tutors, study guides, and practice." },
+                        { icon: TrendingUp, title: "Advance", desc: "Career paths and interview prep." },
+                        { icon: Code2, title: "Build", desc: "Coding arena and system design training." },
+                    ].map((pillar) => (
+                        <div
+                            key={pillar.title}
+                            className="p-6 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4 text-blue-400">
+                                <pillar.icon className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-lg font-semibold mb-2">{pillar.title}</h3>
+                            <p className="text-sm text-gray-400">{pillar.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Role Explorer */}
+            <div id="roles" className="container mx-auto px-6 py-24 border-t border-gray-900">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Choose Your Role</h2>
+                    <p className="text-gray-400 text-lg">Everything you need, organized by who you are</p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
@@ -114,10 +129,10 @@ export default function Home() {
                 </div>
             </div>
 
-            <div id="features" className="container mx-auto px-6 py-24 border-t border-gray-900">
+            <div id="experiences" className="container mx-auto px-6 py-24 border-t border-gray-900">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Choose Your Learning Path</h2>
-                    <p className="text-gray-400 text-lg">Select a feature below to start your AI engineering journey</p>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Experiences</h2>
+                    <p className="text-gray-400 text-lg">Proven pathways for building real AI skills</p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
