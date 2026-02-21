@@ -37,6 +37,13 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Role {
+  STUDENT
+  TEACHER
+  PARENT
+  TUTOR
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -44,6 +51,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  role          Role      @default(STUDENT)
   isSubscribed  Boolean   @default(false)
   questionsUsed Int       @default(0)
   freeQuestionLimit Int   @default(5)
@@ -57,6 +65,9 @@ model User {
   progress      Progress[]
   questionAttempts UserQuestionAttempt[]
   subscriptionCodes SubscriptionCode[]
+  tutorApplication TutorApplication?
+  children      ParentChild[] @relation("Parent")
+  parents       ParentChild[] @relation("Child")
 }
 
 model VerificationToken {
@@ -144,4 +155,32 @@ model ExamSubmission {
   createdAt   DateTime @default(now())
   
   exam        Exam?    @relation(fields: [examId], references: [id], onDelete: SetNull)
+}
+
+model TutorApplication {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  fullName        String
+  email           String
+  phone           String?
+  subjects        String[]
+  qualifications  String   @db.Text
+  experience      String   @db.Text
+  bio             String?  @db.Text
+  linkedinUrl     String?
+  status          String   @default("PENDING") // PENDING | APPROVED | REJECTED
+  reviewNote      String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ParentChild {
+  id        String @id @default(cuid())
+  parentId  String
+  childId   String
+  parent    User   @relation("Parent", fields: [parentId], references: [id], onDelete: Cascade)
+  child     User   @relation("Child", fields: [childId], references: [id], onDelete: Cascade)
+  
+  @@unique([parentId, childId])
 }

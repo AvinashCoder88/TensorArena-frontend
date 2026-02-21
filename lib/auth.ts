@@ -42,6 +42,7 @@ export const authOptions: AuthOptions = {
                     id: user.id,
                     email: user.email,
                     name: user.name,
+                    role: user.role,
                 }
             }
         })
@@ -56,6 +57,7 @@ export const authOptions: AuthOptions = {
         async session({ session, token }) {
             if (session.user && token.sub) {
                 session.user.id = token.sub
+                session.user.role = (token.role as string) || "STUDENT"
                 // Fetch subscription status and question tracking
                 const user = await prisma.user.findUnique({
                     where: { id: token.sub }
@@ -69,6 +71,7 @@ export const authOptions: AuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.sub = user.id
+                token.role = (user as any).role || "STUDENT" // eslint-disable-line @typescript-eslint/no-explicit-any
             }
             return token
         }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen } from "lucide-react";
+import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen, Users, Briefcase } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -126,6 +126,20 @@ export default function Home() {
                             desc: "Automated exam grading, student ranking, and class-wide performance insights.",
                             link: "/teacher",
                             delay: "600ms"
+                        },
+                        {
+                            icon: Briefcase,
+                            title: "Become a Tutor",
+                            desc: "Join our network of expert tutors. Set your schedule, choose your subjects, and start earning by teaching AI and coding.",
+                            link: "/become-a-tutor",
+                            delay: "700ms"
+                        },
+                        {
+                            icon: Users,
+                            title: "For Parents",
+                            desc: "Monitor your child's learning progress, connect them with verified tutors, and track their growth in real-time.",
+                            link: "/parent/dashboard",
+                            delay: "800ms"
                         }
                     ].map((feature, i) => (
                         <Link
