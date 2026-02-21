@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 import "./globals.css";
 import { Providers } from "./providers";
+import { GlobalHeader } from "@/components/GlobalHeader";
 
 export const metadata: Metadata = {
   title: "TensorArena - Master AI Engineering",
@@ -68,7 +69,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans min-h-screen flex flex-col">
         <Providers>
-
+          <GlobalHeader />
           <main className="flex-grow">
             {children}
           </main>

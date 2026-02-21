@@ -11,6 +11,7 @@ export const ExamUploader: React.FC<ExamUploaderProps> = ({ onUploadSuccess }) =
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
@@ -39,12 +40,24 @@ export const ExamUploader: React.FC<ExamUploaderProps> = ({ onUploadSuccess }) =
         formData.append("file", file);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/teacher/upload`, {
+            const response = await fetch(`${API_BASE_URL}/teacher/upload`, {
                 method: "POST",
                 body: formData,
             });
 
-            if (!response.ok) throw new Error("Upload failed");
+            if (!response.ok) {
+                let message = `Upload failed (${response.status})`;
+                try {
+                    const data = await response.json();
+                    if (data?.detail) message = data.detail;
+                } catch {
+                    // ignore JSON parsing errors
+                }
+                if (response.status === 520) {
+                    message = "Upload service is unavailable right now. Please try again in a minute.";
+                }
+                throw new Error(message);
+            }
 
             const result = await response.json();
             onUploadSuccess(result);
