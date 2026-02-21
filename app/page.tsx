@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen, Users, Briefcase } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { ROLE_LABELS, ROLE_DESCRIPTIONS } from "@/lib/services";
 
 export default function Home() {
     const { data: session } = useSession();
@@ -70,6 +71,49 @@ export default function Home() {
             </div>
 
             {/* Features Grid */}
+            <div className="container mx-auto px-6 py-24 border-t border-gray-900">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Explore by Role</h2>
+                    <p className="text-gray-400 text-lg">Start with the services tailored to you</p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8">
+                    {[
+                        { key: "teacher", icon: BookOpen, link: "/roles/teacher" },
+                        { key: "student", icon: GraduationCap, link: "/roles/student" },
+                        { key: "parent", icon: Users, link: "/roles/parent" },
+                        { key: "professional", icon: Briefcase, link: "/roles/professional" },
+                        { key: "coder", icon: Code2, link: "/roles/coder" },
+                    ].map((role) => (
+                        <Link
+                            key={role.key}
+                            href={role.link}
+                            className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-900/20 group"
+                        >
+                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
+                                <role.icon className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">
+                                {ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]}
+                            </h3>
+                            <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+                                {ROLE_DESCRIPTIONS[role.key as keyof typeof ROLE_DESCRIPTIONS]}
+                            </p>
+                        </Link>
+                    ))}
+                </div>
+
+                <div className="mt-10 text-center">
+                    <Link
+                        href="/services"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-800 text-gray-300 hover:text-white hover:border-blue-500/50 transition-colors"
+                    >
+                        Browse Full Services Catalog
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
+            </div>
+
             <div id="features" className="container mx-auto px-6 py-24 border-t border-gray-900">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">Choose Your Learning Path</h2>

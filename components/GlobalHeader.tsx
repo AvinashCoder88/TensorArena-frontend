@@ -48,6 +48,12 @@ export function GlobalHeader() {
                                 Home
                             </Link>
                         )}
+                        <Link
+                            href="/services"
+                            className={`text-sm transition-colors ${pathname === "/services" ? "text-white" : "text-gray-400 hover:text-white"}`}
+                        >
+                            Services
+                        </Link>
 
                         {/* Role-specific nav links */}
                         {session && roleNavItems.map((item) => (
