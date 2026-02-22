@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { mockStudents, mockTeachers } from "@/lib/mockErpData";
+import { Role } from "@prisma/client";
 
 const INTEGRATION_KIND = "ERP";
 
@@ -36,8 +37,8 @@ export async function POST() {
             for (const u of allUsers) {
                 await prisma.user.upsert({
                     where: { email: u.email },
-                    update: { role: u.role as any, name: u.name },
-                    create: { name: u.name, email: u.email, role: u.role as any, password: "password123" }
+                    update: { role: u.role as Role, name: u.name },
+                    create: { name: u.name, email: u.email, role: u.role as Role, password: "password123" }
                 });
             }
             return NextResponse.json({
