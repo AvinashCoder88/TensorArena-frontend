@@ -276,3 +276,15 @@ model GradedResult {
   answerSheet   AnswerSheet @relation(fields: [answerSheetId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
 }
+
+model IntegrationSetting {
+  id           String   @id @default(cuid())
+  kind         String   @unique // "ERP"
+  provider     String
+  tenant       String
+  clientId     String
+  clientSecret String
+  status       String   @default("configured") // configured | disabled
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

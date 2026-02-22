@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Upload, Users, BookOpen, Award, TrendingUp, AlertTriangle, Plus, ChevronRight, FileText, Loader2, CheckCircle, FolderOpen, GraduationCap, X, UserPlus } from 'lucide-react';
+import { Upload, Users, BookOpen, Award, TrendingUp, AlertTriangle, Plus, ChevronRight, FileText, Loader2, CheckCircle, FolderOpen, GraduationCap, X, UserPlus, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GradedQuestion {
@@ -69,6 +69,10 @@ export default function TeacherPage() {
     const [enrollEmail, setEnrollEmail] = useState("");
     const [enrolling, setEnrolling] = useState(false);
     const [enrollMsg, setEnrollMsg] = useState("");
+    const [syncingERP, setSyncingERP] = useState(false);
+    const [syncMsg, setSyncMsg] = useState("");
+    const [importingCSV, setImportingCSV] = useState(false);
+    const [importMsg, setImportMsg] = useState("");
 
     // Upload states
     const [uploadingPaper, setUploadingPaper] = useState(false);
@@ -134,6 +138,67 @@ export default function TeacherPage() {
             }
         } catch (err) { console.error(err); }
         finally { setEnrolling(false); }
+    };
+
+    const handleSyncERP = async () => {
+        setSyncingERP(true);
+        setSyncMsg("");
+        try {
+            const res = await fetch("/api/integrations/erp", { method: "POST" });
+            const data = await res.json();
+            setSyncMsg(data.message || "Sync complete.");
+            if (selectedClassroom) {
+                fetchStudents(selectedClassroom.division.id);
+            }
+        } catch (err) {
+            console.error(err);
+            setSyncMsg("Sync failed.");
+        } finally {
+            setSyncingERP(false);
+        }
+    };
+
+    const parseCsv = (text: string) => {
+        const lines = text.split(/\r?\n/).filter(Boolean);
+        if (lines.length === 0) return [];
+        const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
+        const nameIndex = header.indexOf("name");
+        const emailIndex = header.indexOf("email");
+        if (emailIndex === -1) return [];
+        return lines.slice(1).map((line) => {
+            const parts = line.split(",").map((p) => p.trim());
+            return {
+                name: nameIndex >= 0 ? parts[nameIndex] : "",
+                email: parts[emailIndex],
+            };
+        }).filter((s) => s.email);
+    };
+
+    const handleImportCSV = async (file: File) => {
+        if (!selectedClassroom) return;
+        setImportingCSV(true);
+        setImportMsg("");
+        try {
+            const text = await file.text();
+            const roster = parseCsv(text);
+            if (roster.length === 0) {
+                setImportMsg("No valid students found. CSV must include an email column.");
+                return;
+            }
+            const res = await fetch("/api/teacher/roster/import", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ divisionId: selectedClassroom.division.id, students: roster }),
+            });
+            const data = await res.json();
+            setImportMsg(`Imported ${data.imported || 0} students.`);
+            fetchStudents(selectedClassroom.division.id);
+        } catch (err) {
+            console.error(err);
+            setImportMsg("CSV import failed.");
+        } finally {
+            setImportingCSV(false);
+        }
     };
 
     const handleUploadQuestionPaper = async (file: File) => {
@@ -306,6 +371,14 @@ export default function TeacherPage() {
                                 </h1>
                             </div>
                             <div className="flex gap-2">
+                                <button
+                                    onClick={handleSyncERP}
+                                    disabled={syncingERP}
+                                    className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-xl text-sm transition-colors disabled:opacity-60"
+                                >
+                                    {syncingERP ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                                    Sync from ERP
+                                </button>
                                 <button onClick={() => setShowEnrollModal(true)} className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-xl text-sm transition-colors">
                                     <UserPlus className="w-4 h-4" /> Add Student
                                 </button>
@@ -318,6 +391,7 @@ export default function TeacherPage() {
                                 {/* Students list */}
                                 <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5">
                                     <h3 className="font-bold text-sm mb-3 flex items-center gap-2"><Users className="w-4 h-4 text-blue-400" /> Students ({students.length})</h3>
+                                    {syncMsg && <p className="text-xs text-gray-500 mb-2">{syncMsg}</p>}
                                     <div className="space-y-2 max-h-[200px] overflow-y-auto">
                                         {students.map((s) => (
                                             <div key={s.id} className="text-sm p-2 bg-gray-800/50 rounded-lg flex items-center gap-2">
@@ -329,6 +403,24 @@ export default function TeacherPage() {
                                         ))}
                                         {students.length === 0 && <p className="text-xs text-gray-500">No students enrolled yet.</p>}
                                     </div>
+                                </div>
+
+                                {/* CSV import */}
+                                <div
+                                    className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition-all ${importingCSV ? "border-blue-500 bg-blue-500/5" : "border-gray-700 hover:border-blue-500/50"}`}
+                                    onClick={() => !importingCSV && document.getElementById("csv-upload")?.click()}
+                                >
+                                    <input
+                                        type="file"
+                                        id="csv-upload"
+                                        className="hidden"
+                                        accept=".csv"
+                                        onChange={(e) => { if (e.target.files?.[0]) handleImportCSV(e.target.files[0]); }}
+                                    />
+                                    {importingCSV ? <Loader2 className="w-6 h-6 mx-auto text-blue-500 animate-spin mb-2" /> : <Upload className="w-6 h-6 mx-auto text-blue-400 mb-2" />}
+                                    <p className="text-sm font-semibold">Import Students via CSV</p>
+                                    <p className="text-xs text-gray-500 mt-1">CSV with columns: name,email</p>
+                                    {importMsg && <p className="text-xs text-gray-500 mt-2">{importMsg}</p>}
                                 </div>
 
                                 {/* Upload question paper */}

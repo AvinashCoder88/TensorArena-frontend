@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, Network, ArrowDown, UserCheck, BookOpen, Users, Briefcase, Layers, ClipboardCheck, TrendingUp } from "lucide-react";
+import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, ArrowDown, BookOpen, Users, Briefcase, Layers, ClipboardCheck, TrendingUp } from "lucide-react";
 import { ROLE_LABELS, ROLE_DESCRIPTIONS } from "@/lib/services";
 
 export default function Home() {
@@ -142,90 +142,56 @@ export default function Home() {
                 </div>
             </div>
 
-            <div id="experiences" className="container mx-auto px-6 py-24 border-t border-gray-900">
+            <div id="how-it-works" className="container mx-auto px-6 py-24 border-t border-gray-900">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Experiences</h2>
-                    <p className="text-gray-400 text-lg">Proven pathways for building real AI skills</p>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">How TensorArena Works</h2>
+                    <p className="text-gray-400 text-lg">A clear, guided flow from intent to outcomes</p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
                     {[
                         {
-                            icon: Network, // System Design needs a network-like icon
-                            title: "System Design for AI",
-                            desc: "Architect scalable LLM systems, RAG pipelines, and inference clusters. Learn the infrastructure behind the models.",
-                            link: "/system-design", // Updated link
-                            delay: "0ms"
-                        },
-                        {
-                            icon: Code2,
-                            title: "Adaptive Coding Arena",
-                            desc: "From Python basics to advanced GenAI agents, we generate the perfect challenge for your skill level.",
-                            link: "/arena",
-                            delay: "100ms"
+                            icon: Users,
+                            title: "Start with your role",
+                            desc: "Teachers, students, parents, professionals, and coders each get tailored tools."
                         },
                         {
                             icon: Brain,
-                            title: "Adaptive AI Mentor",
-                            desc: "Your personal AI tutor that analyzes your code in real-time, pointing out logic gaps and suggesting optimizations.",
-                            link: "/mentor",
-                            delay: "200ms"
+                            title: "Use targeted services",
+                            desc: "From grading and tutoring to interview prep and coding practice."
                         },
                         {
-                            icon: GraduationCap,
-                            title: "Role-Based Learning Tracks",
-                            desc: "Scenario-based questions tailored to your role. Multiple choice, fill-in-the-blank, and output selection challenges for ML Engineers, Data Scientists, and more.",
-                            link: "/tracks",
-                            delay: "350ms"
-                        },
-                        {
-                            icon: Sparkles, // Use Sparkles or similar for "Novel/Research"
-                            title: "Paper Implementations",
-                            desc: "Don't just read papers—implement them. Build Transformers, Diffusion models, and MoE from scratch.",
-                            link: "/papers", // Updated link
-                            delay: "450ms"
-                        },
-                        {
-                            icon: UserCheck,
-                            title: "Mock Interview Studio",
-                            desc: "Full-scale simulations of coding, behavioral, and system design interviews with AI grading.",
-                            link: "/mock-interview",
-                            delay: "500ms"
-                        },
-                        {
-                            icon: BookOpen,
-                            title: "Teacher Block",
-                            desc: "Automated exam grading, student ranking, and class-wide performance insights.",
-                            link: "/teacher",
-                            delay: "600ms"
-                        },
-                        {
-                            icon: Briefcase,
-                            title: "Become a Tutor",
-                            desc: "Join our network of expert tutors. Set your schedule, choose your subjects, and start earning by teaching AI and coding.",
-                            link: "/become-a-tutor",
-                            delay: "700ms"
-                        },
-                        {
-                            icon: Users,
-                            title: "For Parents",
-                            desc: "Monitor your child's learning progress, connect them with verified tutors, and track their growth in real-time.",
-                            link: "/parent/dashboard",
-                            delay: "800ms"
+                            icon: TrendingUp,
+                            title: "See measurable progress",
+                            desc: "Track learning, identify gaps, and improve outcomes with insights."
                         }
-                    ].map((feature, i) => (
-                        <Link
-                            key={i}
-                            href={feature.link}
-                            className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-900/20 group animate-fade-in-up"
-                            style={{ animationDelay: feature.delay }}
+                    ].map((step) => (
+                        <div
+                            key={step.title}
+                            className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300"
                         >
-                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
-                                <feature.icon className="w-6 h-6" />
+                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400">
+                                <step.icon className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">{feature.title}</h3>
-                            <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">{feature.desc}</p>
-                        </Link>
+                            <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                            <p className="text-gray-400 leading-relaxed">{step.desc}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-12 grid md:grid-cols-3 gap-6">
+                    {[
+                        { label: "Role-based navigation", value: "5 roles" },
+                        { label: "Core learning pillars", value: "Assess · Teach · Learn" },
+                        { label: "Services catalog", value: "Growing weekly" },
+                    ].map((stat) => (
+                        <div
+                            key={stat.label}
+                            className="rounded-2xl border border-gray-800 bg-black/40 p-6 text-center"
+                        >
+                            <div className="text-2xl font-bold text-white">{stat.value}</div>
+                            <div className="text-sm text-gray-500 mt-2">{stat.label}</div>
+                        </div>
                     ))}
                 </div>
             </div>
