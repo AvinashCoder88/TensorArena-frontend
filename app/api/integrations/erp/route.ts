@@ -32,10 +32,11 @@ export async function POST(req: Request) {
         where: { kind: INTEGRATION_KIND },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let body: any = {};
     try {
         body = await req.json();
-    } catch (e) { }
+    } catch { }
 
     if (!existing || existing.status !== "configured") {
         try {
