@@ -17,6 +17,27 @@ async function main() {
         },
     })
 
+    const mockTeachers = [
+        { name: "John Smith", email: "john.smith@school.edu" },
+        { name: "Sarah Connor", email: "sarah.connor@school.edu" },
+        { name: "Alan Turing", email: "aturing@school.edu" },
+    ]
+
+    await Promise.all(
+        mockTeachers.map((t) =>
+            prisma.user.upsert({
+                where: { email: t.email },
+                update: { name: t.name, role: "TEACHER", password },
+                create: {
+                    email: t.email,
+                    name: t.name,
+                    password,
+                    role: "TEACHER",
+                },
+            })
+        )
+    )
+
     const students = await Promise.all(
         Array.from({ length: 10 }).map((_, index) =>
             prisma.user.upsert({
