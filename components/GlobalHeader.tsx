@@ -49,10 +49,16 @@ export function GlobalHeader() {
                             </Link>
                         )}
                         <Link
+                            href="/explore"
+                            className={`text-sm transition-colors ${pathname === "/explore" ? "text-white" : "text-gray-400 hover:text-white"}`}
+                        >
+                            Explore
+                        </Link>
+                        <Link
                             href="/services"
                             className={`text-sm transition-colors ${pathname === "/services" ? "text-white" : "text-gray-400 hover:text-white"}`}
                         >
-                            Services
+                            Catalog
                         </Link>
 
                         {/* Role-specific nav links */}

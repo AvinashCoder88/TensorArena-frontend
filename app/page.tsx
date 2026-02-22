@@ -44,7 +44,7 @@ export default function Home() {
                         <div className="flex flex-col items-center justify-center space-y-4 pt-8">
                             <div className="flex items-center space-x-4">
                                 <Link
-                                    href="/services"
+                                    href="/explore"
                                     className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105 active:scale-95"
                                 >
                                     Explore Services
