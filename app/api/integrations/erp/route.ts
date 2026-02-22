@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { mockStudents, mockTeachers } from "@/lib/mockErpData";
 import { Role } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const INTEGRATION_KIND = "ERP";
 
@@ -33,7 +34,6 @@ export async function POST() {
 
     if (!existing || existing.status !== "configured") {
         try {
-            const bcrypt = require("bcryptjs");
             const hashedPassword = await bcrypt.hash("password123", 10);
             const allUsers = [...mockTeachers, ...mockStudents];
             for (const u of allUsers) {

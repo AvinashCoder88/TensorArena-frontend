@@ -69,6 +69,7 @@ export default function Home() {
 
                     <div className="mt-20 relative max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/20 border border-gray-800 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
                             alt="High-tech AI learning environment"

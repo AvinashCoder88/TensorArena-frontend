@@ -88,6 +88,7 @@ export default function AboutUs() {
                         >
                             <div className="relative h-64 w-full overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/20 to-transparent z-10" />
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={exp.image}
                                     alt={exp.title}
