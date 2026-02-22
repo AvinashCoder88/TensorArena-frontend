@@ -6,7 +6,19 @@ import { Loader2 } from "lucide-react";
 export default function QuizBuilderPage() {
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState<any>(null);
+    interface QuizQuestion {
+        question: string;
+        options: string[];
+        answer_index: number;
+        explanation?: string;
+    }
+
+    interface QuizResult {
+        quiz_title?: string;
+        questions?: QuizQuestion[];
+    }
+
+    const [result, setResult] = useState<QuizResult | null>(null);
     const [error, setError] = useState("");
 
     const handleSubmit = async () => {
@@ -25,8 +37,12 @@ export default function QuizBuilderPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data?.detail || "Request failed");
             setResult(data.result);
-        } catch (err: any) {
-            setError(err.message || "Request failed");
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Request failed");
+            }
         } finally {
             setLoading(false);
         }
@@ -61,7 +77,7 @@ export default function QuizBuilderPage() {
                         <div className="bg-gray-900/40 border border-gray-800 rounded-xl p-4">
                             <h3 className="font-semibold mb-2">{result.quiz_title}</h3>
                             <div className="space-y-3 text-sm text-gray-300">
-                                {(result.questions || []).map((q: any, idx: number) => (
+                                {(result.questions || []).map((q, idx) => (
                                     <div key={idx} className="border border-gray-800 rounded-lg p-3">
                                         <div className="font-medium">{idx + 1}. {q.question}</div>
                                         <ul className="mt-2 space-y-1">

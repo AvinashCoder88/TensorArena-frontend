@@ -6,7 +6,19 @@ import { Loader2 } from "lucide-react";
 export default function WritingCoachPage() {
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState<any>(null);
+    interface LineEdit {
+        issue: string;
+        suggestion: string;
+    }
+
+    interface WritingCoachResult {
+        strengths?: string[];
+        improvements?: string[];
+        line_edits?: LineEdit[];
+        overall_summary?: string;
+    }
+
+    const [result, setResult] = useState<WritingCoachResult | null>(null);
     const [error, setError] = useState("");
 
     const handleSubmit = async () => {
@@ -25,8 +37,12 @@ export default function WritingCoachPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data?.detail || "Request failed");
             setResult(data.result);
-        } catch (err: any) {
-            setError(err.message || "Request failed");
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Request failed");
+            }
         } finally {
             setLoading(false);
         }
@@ -77,7 +93,7 @@ export default function WritingCoachPage() {
                         <section className="bg-gray-900/40 border border-gray-800 rounded-xl p-4">
                             <h3 className="font-semibold mb-2">Line Edits</h3>
                             <div className="text-sm text-gray-300 space-y-2">
-                                {(result.line_edits || []).map((item: any, idx: number) => (
+                                {(result.line_edits || []).map((item, idx) => (
                                     <div key={idx} className="border border-gray-800 rounded-lg p-3">
                                         <div className="text-gray-400">Issue: {item.issue}</div>
                                         <div>Suggestion: {item.suggestion}</div>
