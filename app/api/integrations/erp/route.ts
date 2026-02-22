@@ -33,12 +33,14 @@ export async function POST() {
 
     if (!existing || existing.status !== "configured") {
         try {
+            const bcrypt = require("bcryptjs");
+            const hashedPassword = await bcrypt.hash("password123", 10);
             const allUsers = [...mockTeachers, ...mockStudents];
             for (const u of allUsers) {
                 await prisma.user.upsert({
                     where: { email: u.email },
-                    update: { role: u.role as Role, name: u.name },
-                    create: { name: u.name, email: u.email, role: u.role as Role, password: "password123" }
+                    update: { role: u.role as Role, name: u.name, password: hashedPassword },
+                    create: { name: u.name, email: u.email, role: u.role as Role, password: hashedPassword }
                 });
             }
             return NextResponse.json({
