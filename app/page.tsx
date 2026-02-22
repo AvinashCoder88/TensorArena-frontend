@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, ArrowDown, BookOpen, Users, Briefcase, Layers, ClipboardCheck, TrendingUp } from "lucide-react";
 import { ROLE_LABELS, ROLE_DESCRIPTIONS } from "@/lib/services";
 
