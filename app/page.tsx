@@ -44,10 +44,10 @@ export default function Home() {
                         <div className="flex flex-col items-center justify-center space-y-4 pt-8">
                             <div className="flex items-center space-x-4">
                                 <Link
-                                    href="/explore"
+                                    href="/about"
                                     className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105 active:scale-95"
                                 >
-                                    Explore Services
+                                    About Us
                                     <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     <div className="absolute inset-0 rounded-full bg-white/20 blur-xl group-hover:blur-2xl transition-all opacity-0 group-hover:opacity-100" />
                                 </Link>
@@ -61,9 +61,28 @@ export default function Home() {
                                     <ArrowDown className="w-5 h-5" />
                                 </button>
                             </div>
-                            <p className="text-sm text-gray-500 font-medium bg-gray-900/50 px-4 py-2 rounded-full border border-gray-800">
-                                Built for classrooms, teams, and self-learners.
+                            <p className="text-sm text-gray-500 font-medium bg-gray-900/50 px-4 py-2 rounded-full border border-gray-800 tracking-wide">
+                                Built for classrooms, teams, and ambitious self-learners.
                             </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-20 relative max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/20 border border-gray-800 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
+                        <img
+                            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+                            alt="High-tech AI learning environment"
+                            className="w-full object-cover h-[400px] md:h-[600px] opacity-80 hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute bottom-6 left-6 right-6 z-20 flex justify-between items-end">
+                            <div className="bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-2xl max-w-xs">
+                                <div className="text-blue-400 font-bold mb-1">Grade-Specific Kits</div>
+                                <div className="text-sm text-gray-300">Physical robotics hardware synchronized with our online AI curriculum.</div>
+                            </div>
+                            <div className="bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-2xl max-w-xs hidden md:block">
+                                <div className="text-purple-400 font-bold mb-1">Instant Grading</div>
+                                <div className="text-sm text-gray-300">Upload paper exams and let Gemini 1.5 evaluate logic and steps.</div>
+                            </div>
                         </div>
                     </div>
                 </div>

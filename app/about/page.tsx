@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ArrowRight, Bot, Target, Play, Shield, Code2, GraduationCap, Video, Users } from "lucide-react";
-import Image from "next/image";
 
 const HIGHLIGHTED_EXPERIENCES = [
     {
@@ -61,7 +60,7 @@ const HIGHLIGHTED_EXPERIENCES = [
     }
 ];
 
-export default function ExploreGallery() {
+export default function AboutUs() {
     return (
         <div className="min-h-screen bg-black text-white selection:bg-blue-500/30">
             {/* Header Section */}
@@ -69,7 +68,7 @@ export default function ExploreGallery() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-gray-900/0 to-black/0" />
                 <div className="container mx-auto px-6 relative z-10 text-center">
                     <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-                        Explore <span className="text-blue-500/90">TensorArena</span>
+                        About <span className="text-blue-500/90">Us</span>
                     </h1>
                     <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
                         Discover our suite of state-of-the-art tools and services. From instant AI grading to
@@ -89,11 +88,10 @@ export default function ExploreGallery() {
                         >
                             <div className="relative h-64 w-full overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/20 to-transparent z-10" />
-                                <Image
+                                <img
                                     src={exp.image}
                                     alt={exp.title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
                                 <div className="absolute top-4 right-4 z-20 flex gap-2">
                                     {exp.tags.slice(0, 2).map(tag => (
