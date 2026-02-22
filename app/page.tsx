@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Brain, Code2, Sparkles, GraduationCap, ArrowDown, BookOpen, Users, Briefcase, Layers, ClipboardCheck, TrendingUp } from "lucide-react";
 import { ROLE_LABELS, ROLE_DESCRIPTIONS } from "@/lib/services";
 
@@ -126,27 +127,39 @@ export default function Home() {
 
                 <div className="grid md:grid-cols-3 gap-8">
                     {[
-                        { key: "teacher", icon: BookOpen, link: "/roles/teacher" },
-                        { key: "student", icon: GraduationCap, link: "/roles/student" },
-                        { key: "parent", icon: Users, link: "/roles/parent" },
-                        { key: "professional", icon: Briefcase, link: "/roles/professional" },
-                        { key: "coder", icon: Code2, link: "/roles/coder" },
+                        { key: "teacher", icon: BookOpen, link: "/roles/teacher", image: "/role-images/teacher.svg" },
+                        { key: "student", icon: GraduationCap, link: "/roles/student", image: "/role-images/student.svg" },
+                        { key: "parent", icon: Users, link: "/roles/parent", image: "/role-images/parent.svg" },
+                        { key: "professional", icon: Briefcase, link: "/roles/professional", image: "/role-images/professional.svg" },
+                        { key: "coder", icon: Code2, link: "/roles/coder", image: "/role-images/coder.svg" },
                     ].map((role) => (
                         <Link
                             key={role.key}
                             href={role.link}
                             onClick={() => sessionStorage.setItem("homeScrollY", window.scrollY.toString())}
-                            className="p-8 rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-900/20 group"
+                            className="overflow-hidden rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-900/20 group"
                         >
-                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
-                                <role.icon className="w-6 h-6" />
+                            <div className="relative h-36 w-full">
+                                <Image
+                                    src={role.image}
+                                    alt={`${ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]} illustration`}
+                                    fill
+                                    className="object-cover"
+                                    priority={role.key === "teacher"}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                                <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300">
+                                    <role.icon className="w-5 h-5" />
+                                </div>
                             </div>
-                            <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">
-                                {ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]}
-                            </h3>
-                            <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
-                                {ROLE_DESCRIPTIONS[role.key as keyof typeof ROLE_DESCRIPTIONS]}
-                            </p>
+                            <div className="p-6">
+                                <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">
+                                    {ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]}
+                                </h3>
+                                <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+                                    {ROLE_DESCRIPTIONS[role.key as keyof typeof ROLE_DESCRIPTIONS]}
+                                </p>
+                            </div>
                         </Link>
                     ))}
                 </div>
