@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { mockStudents, mockTeachers } from "@/lib/mockErpData";
 
 const INTEGRATION_KIND = "ERP";
 
@@ -30,10 +31,26 @@ export async function POST() {
     });
 
     if (!existing || existing.status !== "configured") {
-        return NextResponse.json({
-            status: "using_local_db",
-            message: "No ERP configured. Using local database for now.",
-        });
+        try {
+            const allUsers = [...mockTeachers, ...mockStudents];
+            for (const u of allUsers) {
+                await prisma.user.upsert({
+                    where: { email: u.email },
+                    update: { role: u.role as any, name: u.name },
+                    create: { name: u.name, email: u.email, role: u.role as any, password: "password123" }
+                });
+            }
+            return NextResponse.json({
+                status: "using_local_db",
+                message: `Mock ERP Sync Complete: added ${mockTeachers.length} teachers and ${mockStudents.length} students.`,
+            });
+        } catch (err) {
+            console.error("Local mock ERP sync failed:", err);
+            return NextResponse.json({
+                status: "using_local_db",
+                message: "No ERP configured. Using local database for now (Sync failed).",
+            });
+        }
     }
 
     return NextResponse.json({
