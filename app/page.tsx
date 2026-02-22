@@ -127,38 +127,69 @@ export default function Home() {
 
                 <div className="grid md:grid-cols-3 gap-8">
                     {[
-                        { key: "teacher", icon: BookOpen, link: "/roles/teacher", image: "/role-images/teacher.svg" },
-                        { key: "student", icon: GraduationCap, link: "/roles/student", image: "/role-images/student.svg" },
-                        { key: "parent", icon: Users, link: "/roles/parent", image: "/role-images/parent.svg" },
-                        { key: "professional", icon: Briefcase, link: "/roles/professional", image: "/role-images/professional.svg" },
-                        { key: "coder", icon: Code2, link: "/roles/coder", image: "/role-images/coder.svg" },
+                        {
+                            key: "teacher",
+                            icon: BookOpen,
+                            link: "/roles/teacher",
+                            image: "https://images.unsplash.com/photo-1544717302-de2939b7ef71?q=80&w=2070&auto=format&fit=crop"
+                        },
+                        {
+                            key: "student",
+                            icon: GraduationCap,
+                            link: "/roles/student",
+                            image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop"
+                        },
+                        {
+                            key: "parent",
+                            icon: Users,
+                            link: "/roles/parent",
+                            image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop"
+                        },
+                        {
+                            key: "professional",
+                            icon: Briefcase,
+                            link: "/roles/professional",
+                            image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop"
+                        },
+                        {
+                            key: "coder",
+                            icon: Code2,
+                            link: "/roles/coder",
+                            image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070&auto=format&fit=crop"
+                        },
                     ].map((role) => (
                         <Link
                             key={role.key}
                             href={role.link}
                             onClick={() => sessionStorage.setItem("homeScrollY", window.scrollY.toString())}
-                            className="overflow-hidden rounded-2xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-900/20 group"
+                            className="group flex flex-col overflow-hidden rounded-3xl bg-gray-900/20 border border-gray-800 hover:border-blue-500/50 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-900/20"
                         >
-                            <div className="relative h-36 w-full">
-                                <Image
+                            <div className="relative h-56 w-full overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10" />
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
                                     src={role.image}
-                                    alt={`${ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]} illustration`}
-                                    fill
-                                    className="object-cover"
-                                    priority={role.key === "teacher"}
+                                    alt={ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]}
+                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                                <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300">
-                                    <role.icon className="w-5 h-5" />
+                                <div className="absolute top-4 left-4 z-20">
+                                    <div className="w-10 h-10 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-blue-400">
+                                        <role.icon className="w-5 h-5" />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="p-6">
-                                <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">
+
+                            <div className="p-8 flex-1 flex flex-col relative z-20">
+                                <h3 className="text-2xl font-bold mb-3 group-hover:text-blue-400 transition-colors">
                                     {ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]}
                                 </h3>
-                                <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+                                <p className="text-gray-400 leading-relaxed mb-6 flex-1 group-hover:text-gray-300 transition-colors">
                                     {ROLE_DESCRIPTIONS[role.key as keyof typeof ROLE_DESCRIPTIONS]}
                                 </p>
+                                <div className="flex items-center text-sm font-bold text-gray-400 group-hover:text-white transition-colors">
+                                    Continue as {ROLE_LABELS[role.key as keyof typeof ROLE_LABELS]}
+                                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform text-blue-500" />
+                                </div>
                             </div>
                         </Link>
                     ))}
