@@ -144,7 +144,12 @@ export default function TeacherPage() {
         setSyncingERP(true);
         setSyncMsg("");
         try {
-            const res = await fetch("/api/integrations/erp", { method: "POST" });
+            const body = selectedClassroom ? { divisionId: selectedClassroom.division.id } : {};
+            const res = await fetch("/api/integrations/erp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            });
             const data = await res.json();
             setSyncMsg(data.message || "Sync complete.");
             if (selectedClassroom) {
